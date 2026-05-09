@@ -58,3 +58,47 @@ document.addEventListener('DOMContentLoaded', () => {
             th.dataset.sortDir = asc ? 'desc' : 'asc';
         });
     });
+
+     const imgInput = document.getElementById('event_image');
+    const imgPreview = document.getElementById('image_preview');
+    if (imgInput && imgPreview) {
+        imgInput.addEventListener('change', () => {
+            const file = imgInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    imgPreview.src = e.target.result;
+                    imgPreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+});
+
+/**
+ * Create a doughnut chart.
+ * @param {string} canvasId
+ * @param {string[]} labels
+ * @param {number[]} data
+ * @param {string[]} colors
+ */
+function makeDoughnut(canvasId, labels, data, colors) {
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) return;
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels,
+            datasets: [{ data, backgroundColor: colors, borderWidth: 2 }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom', labels: { font: { family: 'DM Sans' } } }
+            },
+            cutout: '65%'
+        }
+    });
+}
