@@ -102,3 +102,43 @@ function makeDoughnut(canvasId, labels, data, colors) {
         }
     });
 }
+
+* Create a bar chart.
+ * @param {string} canvasId
+ * @param {string[]} labels
+ * @param {number[]} data
+ * @param {string} label
+ * @param {string} color
+ */
+function makeBar(canvasId, labels, data, label, color = '#2d9b5a') {
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) return;
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [{
+                label,
+                data,
+                backgroundColor: color + 'cc',
+                borderColor: color,
+                borderWidth: 2,
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1 },
+                    grid: { color: '#e8f7ef' }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+}
