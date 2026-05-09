@@ -142,3 +142,26 @@ $siteStats = $statsStmt->fetch();
     </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg buliga-navbar">
+    <div class="container">
+        <a class="navbar-brand buliga-brand" href="/">
+            <span class="brand-icon">🌿</span> Buliga
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <i class="bi bi-list text-white fs-4"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="#how">How It Works</a></li>
+                <li class="nav-item"><a class="nav-link" href="#events">Browse Events</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+            </ul>
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link" href="/auth/login.php">Log In</a></li>
+                <li class="nav-item ms-2">
+                    <a class="btn btn-buliga" href="/auth/register.php">Get Started</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
