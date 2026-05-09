@@ -297,3 +297,182 @@ $siteStats = $statsStmt->fetch();
         </div>
     </div>
 </section>
+<section id="events" class="py-5" style="background:var(--green-pale);">
+    <div class="container">
+        <div class="d-flex align-items-end justify-content-between mb-4">
+            <div>
+                <span class="section-eyebrow">Open Now</span>
+                <h2 class="fw-sora mb-0" style="font-size:2rem;">Upcoming Events</h2>
+            </div>
+            <a href="/auth/register.php" class="btn btn-green">
+                Register to Join <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <?php if ($featuredEvents): ?>
+        <div class="row g-4">
+            <?php foreach ($featuredEvents as $ev): ?>
+            <div class="col-md-4">
+                <div class="buliga-card h-100">
+                    <?php if ($ev['image_url']): ?>
+                        <img src="<?= htmlspecialchars($ev['image_url']) ?>"
+                             class="card-img-top" alt="Event" />
+                    <?php else: ?>
+                        <div class="event-card-placeholder">🌿</div>
+                    <?php endif; ?>
+                    <div class="p-3 d-flex flex-column">
+                        <span class="status-badge status-open mb-2" style="width:fit-content;">Open</span>
+                        <h6 class="fw-sora mb-1"><?= htmlspecialchars($ev['title']) ?></h6>
+                        <p class="small text-muted mb-2">
+                            <?= htmlspecialchars(substr($ev['description'], 0, 90)) ?>…
+                        </p>
+                        <div class="small text-muted mb-1">
+                            <i class="bi bi-calendar3 me-1"></i>
+                            <?= date('M d, Y', strtotime($ev['event_date'])) ?>
+                        </div>
+                        <div class="small text-muted mb-3">
+                            <i class="bi bi-geo-alt me-1"></i>
+                            <?= htmlspecialchars($ev['location']) ?>
+                        </div>
+                        <div class="mt-auto">
+                            <a href="/auth/register.php" class="btn btn-green btn-sm w-100">
+                                <i class="bi bi-plus-circle me-1"></i>Register to Join
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php else: ?>
+            <div class="empty-state">
+                <span class="empty-icon">📅</span>
+                <p>No upcoming events right now. Check back soon!</p>
+            </div>
+        <?php endif; ?>
+    </div>
+</section>
+
+<section id="about" class="py-5">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <span class="section-eyebrow">About Buliga</span>
+                <h2 class="fw-sora mb-3" style="font-size:2rem;">Volunteering Made Simple</h2>
+                <p class="text-muted mb-3">
+                    Buliga (Filipino for <em>"partner/ally"</em>) is a web-based platform built to address
+                    the college's volunteer recruitment challenges. It replaces fragmented messaging threads
+                    and paper-based tracking with a single, organized hub.
+                </p>
+                <p class="text-muted mb-4">
+                    Whether you're a student looking to make an impact or an organizer coordinating
+                    community events, Buliga gives you the tools to connect, collaborate, and serve.
+                </p>
+                <a href="/auth/register.php" class="btn btn-green px-4">
+                    <i class="bi bi-heart me-2"></i>Start Volunteering Today
+                </a>
+            </div>
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="feature-card text-center">
+                            <div style="font-size:2.5rem;margin-bottom:.5rem;">🎓</div>
+                            <div class="fw-sora">For Students</div>
+                            <div class="small text-muted mt-1">Find events, register, and track hours</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="feature-card text-center">
+                            <div style="font-size:2.5rem;margin-bottom:.5rem;">🧑‍💼</div>
+                            <div class="fw-sora">For Organizers</div>
+                            <div class="small text-muted mt-1">Create events and manage volunteers</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="feature-card text-center">
+                            <div style="font-size:2.5rem;margin-bottom:.5rem;">📊</div>
+                            <div class="fw-sora">Data-Driven</div>
+                            <div class="small text-muted mt-1">Visual dashboards and analytics</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="feature-card text-center">
+                            <div style="font-size:2.5rem;margin-bottom:.5rem;">🔐</div>
+                            <div class="fw-sora">Secure</div>
+                            <div class="small text-muted mt-1">Role-based access with bcrypt auth</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="cta-section">
+            <h2 class="fw-sora mb-3" style="font-size:2.2rem;">
+                Ready to Make a Difference?
+            </h2>
+            <p class="mb-4" style="opacity:.85;max-width:480px;margin:0 auto 1.5rem;">
+                Join hundreds of students already volunteering through Buliga and start
+                building your community impact today.
+            </p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="/auth/register.php" class="btn btn-buliga btn-lg px-4">
+                    <i class="bi bi-person-plus me-2"></i>Create Free Account
+                </a>
+                <a href="/auth/login.php" class="btn btn-lg px-4"
+                   style="background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:var(--radius-pill);">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Log In
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-5">
+    <div class="container">
+        <div class="cta-section">
+            <h2 class="fw-sora mb-3" style="font-size:2.2rem;">
+                Ready to Make a Difference?
+            </h2>
+            <p class="mb-4" style="opacity:.85;max-width:480px;margin:0 auto 1.5rem;">
+                Join hundreds of students already volunteering through Buliga and start
+                building your community impact today.
+            </p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="/auth/register.php" class="btn btn-buliga btn-lg px-4">
+                    <i class="bi bi-person-plus me-2"></i>Create Free Account
+                </a>
+                <a href="/auth/login.php" class="btn btn-lg px-4"
+                   style="background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:var(--radius-pill);">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Log In
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<footer class="buliga-footer py-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="buliga-brand-sm">🌿 Buliga</div>
+                <div class="small mt-1" style="opacity:.6;">Volunteer Management Platform</div>
+            </div>
+            <div class="col-md-4 text-md-center mb-3 mb-md-0">
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="#how"    class="text-muted small text-decoration-none">How It Works</a>
+                    <a href="#events" class="text-muted small text-decoration-none">Events</a>
+                    <a href="#about"  class="text-muted small text-decoration-none">About</a>
+                </div>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <div class="small" style="opacity:.5;">IT26 Final Project &copy; <?= date('Y') ?></div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
