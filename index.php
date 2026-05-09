@@ -24,3 +24,12 @@ $evStmt = $db->prepare("
 ");
 $evStmt->execute();
 $featuredEvents = $evStmt->fetchAll();
+$statsStmt = $db->query("
+    SELECT
+        (SELECT COUNT(*) FROM events)                                   AS total_events,
+        (SELECT COUNT(*) FROM users WHERE role='student')               AS total_volunteers,
+        (SELECT COALESCE(SUM(hours_rendered),0) FROM registrations
+         WHERE status='completed')                                       AS total_hours
+");
+$siteStats = $statsStmt->fetch();
+?>
