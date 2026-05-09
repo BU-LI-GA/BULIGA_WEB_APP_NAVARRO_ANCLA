@@ -350,3 +350,158 @@ a:hover { color: var(--green-deep); }
     color: var(--text-dark);
     margin: 0;
 }
+
+/* ---------- Public Landing ---------- */
+.landing-hero {
+    background: linear-gradient(160deg, var(--green-deep) 0%, #1e7d42 50%, #2d9b5a 100%);
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+}
+
+.landing-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.landing-hero .display-3 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.landing-hero .lead { opacity: 0.88; font-size: 1.15rem; }
+
+/* ---------- Chart Container ---------- */
+.chart-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.chart-title {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+/* ---------- Auth Pages ---------- */
+.auth-wrapper {
+    min-height: 100vh;
+    background: linear-gradient(160deg, var(--green-deep) 0%, #1e7d42 50%, var(--green-mid) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.25);
+}
+
+.auth-logo {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--green-deep);
+    text-align: center;
+    margin-bottom: 0.25rem;
+}
+
+.auth-tagline {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    margin-bottom: 2rem;
+}
+
+/* ---------- Announcement Card ---------- */
+.announcement-card {
+    background: var(--amber-light);
+    border: 1px solid #f0d090;
+    border-left: 4px solid var(--amber);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.announcement-card .ann-title {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--soil);
+}
+
+.announcement-card .ann-meta {
+    font-size: 0.78rem;
+    color: var(--amber-dark);
+    margin-top: 2px;
+}
+
+/* ---------- Empty State ---------- */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+}
+
+.empty-state .empty-icon { font-size: 3.5rem; margin-bottom: 1rem; display: block; }
+.empty-state p { max-width: 300px; margin: 0 auto 1.25rem; }
+
+/* ---------- Search Bar ---------- */
+.search-bar {
+    position: relative;
+}
+
+.search-bar .bi-search {
+    position: absolute;
+    left: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+.search-bar input {
+    padding-left: 2.4rem;
+}
+
+/* ---------- Footer ---------- */
+.buliga-footer {
+    background: var(--green-deep);
+    color: rgba(255,255,255,.7);
+    margin-top: auto;
+}
+
+.buliga-brand-sm {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+/* ---------- Utilities ---------- */
+.text-green  { color: var(--green-mid) !important; }
+.bg-green-pale { background: var(--green-pale) !important; }
+.fw-sora     { font-family: 'Sora', sans-serif; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .stat-card .stat-value { font-size: 1.7rem; }
+    .page-hero h1 { font-size: 1.5rem; }
+    .buliga-form-card { padding: 1.5rem; }
+    .auth-card { padding: 1.75rem; }
+}
