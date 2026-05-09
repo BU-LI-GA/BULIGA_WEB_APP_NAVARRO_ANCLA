@@ -198,3 +198,74 @@ require_once __DIR__ . '/../includes/header.php';
             <?php endif; ?>
         </div>
     </div>
+<div class="section-header">
+        <h5><i class="bi bi-table me-2 text-green"></i>My Events Overview</h5>
+        <a href="/organizer/create-event.php" class="btn btn-green btn-sm">
+            <i class="bi bi-plus me-1"></i>New Event
+        </a>
+    </div>
+
+    <?php if ($myEvents): ?>
+    <div class="buliga-table mb-4">
+        <table class="table mb-0">
+            <thead>
+                <tr>
+                    <th data-sortable>Title</th>
+                    <th data-sortable>Date</th>
+                    <th data-sortable>Status</th>
+                    <th data-sortable>Registrations</th>
+                    <th data-sortable>Approved</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($myEvents as $e): ?>
+                <tr>
+                    <td class="fw-sora" style="font-size:.9rem">
+                        <?= htmlspecialchars($e['title']) ?>
+                    </td>
+                    <td class="small text-muted"><?= date('M d, Y', strtotime($e['event_date'])) ?></td>
+                    <td><span class="status-badge status-<?= $e['status'] ?>"><?= ucfirst($e['status']) ?></span></td>
+                    <td><?= $e['total_regs'] ?> / <?= $e['slots'] ?></td>
+                    <td><?= $e['approved'] ?></td>
+                    <td>
+                        <a href="/organizer/manage-registrations.php?event_id=<?= $e['id'] ?>"
+                           class="btn btn-outline-buliga btn-sm me-1">Volunteers</a>
+                        <a href="/organizer/edit-event.php?id=<?= $e['id'] ?>"
+                           class="btn btn-green btn-sm">Edit</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php else: ?>
+        <div class="empty-state">
+            <span class="empty-icon">📅</span>
+            <p>You haven't created any events yet.</p>
+            <a href="/organizer/create-event.php" class="btn btn-green">Create Your First Event</a>
+        </div>
+    <?php endif; ?>
+</div>
+
+<script>
+makeBar('barChart',
+    <?= json_encode(array_values($barLabels)) ?>,
+    <?= json_encode(array_values($barData)) ?>,
+    'Volunteers Registered'
+);
+
+makeDoughnut('statusChart',
+    ['Open', 'Closed', 'Cancelled'],
+    [<?= $statusOpen ?>, <?= $statusClosed ?>, <?= $statusCancelled ?>],
+    ['#2d9b5a', '#f5a623', '#e74c3c']
+);
+
+makeLine('lineChart',
+    <?= json_encode(array_values($lineLabels)) ?>,
+    <?= json_encode(array_values($lineData)) ?>,
+    'Registrations'
+);
+</script>
+
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
