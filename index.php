@@ -244,3 +244,56 @@ $siteStats = $statsStmt->fetch();
         </div>
     </div>
 </section>
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-eyebrow">Platform Features</span>
+            <h2 class="fw-sora" style="font-size:2rem;">Everything You Need</h2>
+            <p class="text-muted">Built for students and organizers alike</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-sm-6 col-lg-4">
+                <div class="feature-card">
+                    <span class="feature-icon">🗂️</span>
+                    <h6>Event Management</h6>
+                    <p class="text-muted small mb-0">Organizers can create, edit, and manage events with image uploads and slot tracking.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="feature-card">
+                    <span class="feature-icon">📋</span>
+                    <h6>Volunteer Registration</h6>
+                    <p class="text-muted small mb-0">Students register in one click and track their status from pending to completed.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="feature-card">
+                    <span class="feature-icon">📢</span>
+                    <h6>Announcements</h6>
+                    <p class="text-muted small mb-0">Organizers broadcast updates and reminders directly to registered volunteers.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="feature-card">
+                    <span class="feature-icon">📊</span>
+                    <h6>Live Dashboards</h6>
+                    <p class="text-muted small mb-0">Visual charts and stats give both students and organizers instant insights.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="feature-card">
+                    <span class="feature-icon">🔍</span>
+                    <h6>Search & Filter</h6>
+                    <p class="text-muted small mb-0">Find events by title, location, or organizer with real-time search.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="feature-card">
+                    <span class="feature-icon">🕐</span>
+                    <h6>Hours Tracking</h6>
+                    <p class="text-muted small mb-0">Log and monitor volunteer service hours for each completed event.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
