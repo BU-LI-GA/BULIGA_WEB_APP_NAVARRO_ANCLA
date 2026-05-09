@@ -168,4 +168,164 @@ ORDER BY r.id LIMIT 8;</pre>
             INNER JOIN returns only the <?= count($innerResult) ?> registrations where both a matching student AND a matching event exist.
             Orphaned rows (e.g., deleted users) would be excluded.
         </p>
+    </
+    
+    
+     <!-- 2. LEFT JOIN -->
+    <div class="mb-5">
+        <div class="section-header">
+            <h5 class="fw-sora">
+                <span class="status-badge status-completed me-2" style="background:#e8f0ff;color:#2c5cf7;">LEFT JOIN</span>
+                All Events — Including Those With Zero Registrations
+            </h5>
+        </div>
+        <div class="p-3 rounded-3 mb-3" style="background:#1c2c1c;border-radius:var(--radius);">
+            <pre class="mb-0" style="color:#5bbf85;font-size:.8rem;white-space:pre-wrap;">SELECT e.id, e.title, e.status, COUNT(r.id) AS registration_count
+FROM events e
+<span style="color:#f5a623;">LEFT JOIN</span> registrations r ON r.event_id = e.id  -- keep events with 0 registrations
+GROUP BY e.id ORDER BY registration_count DESC LIMIT 8;</pre>
+        </div>
+        <div class="buliga-table">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th data-sortable>Event</th>
+                        <th data-sortable>Status</th>
+                        <th data-sortable>Registrations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($leftResult as $row): ?>
+                    <tr>
+                        <td class="fw-sora" style="font-size:.9rem"><?= htmlspecialchars($row['event_title']) ?></td>
+                        <td><span class="status-badge status-<?= $row['event_status'] ?>"><?= ucfirst($row['event_status']) ?></span></td>
+                        <td>
+                            <?php if ($row['registration_count'] == 0): ?>
+                                <span class="text-muted small">0 <em>(NULL joined → 0)</em></span>
+                            <?php else: ?>
+                                <?= $row['registration_count'] ?>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <p class="small text-muted mt-2">
+            <i class="bi bi-lightbulb text-green me-1"></i>
+            LEFT JOIN keeps ALL <?= count($leftResult) ?> events even if they have zero registrations.
+            The COUNT(r.id) returns 0 (not NULL) due to GROUP BY aggregation.
+        </p>
     </div>
+div>
+
+ <!-- 3. RIGHT JOIN -->
+    <div class="mb-5">
+        <div class="section-header">
+            <h5 class="fw-sora">
+                <span class="status-badge status-pending me-2">RIGHT JOIN</span>
+                All Students — Including Those With No Registrations
+            </h5>
+        </div>
+        <div class="p-3 rounded-3 mb-3" style="background:#1c2c1c;border-radius:var(--radius);">
+            <pre class="mb-0" style="color:#5bbf85;font-size:.8rem;white-space:pre-wrap;">SELECT u.full_name, u.email, COUNT(r.id) AS total_regs, COALESCE(SUM(r.hours_rendered),0) AS hours
+FROM registrations r
+<span style="color:#f5a623;">RIGHT JOIN</span> users u ON r.student_id = u.id  -- keep all students even if 0 registrations
+WHERE u.role = 'student'
+GROUP BY u.id ORDER BY total_regs DESC LIMIT 8;</pre>
+        </div>
+        <div class="buliga-table">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th data-sortable>Student</th>
+                        <th data-sortable>Email</th>
+                        <th data-sortable>Total Regs</th>
+                        <th data-sortable>Hours</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($rightResult as $row): ?>
+                    <tr>
+                        <td class="fw-sora" style="font-size:.9rem"><?= htmlspecialchars($row['student_name']) ?></td>
+                        <td class="small text-muted"><?= htmlspecialchars($row['email']) ?></td>
+                        <td>
+                            <?php if ($row['total_registrations'] == 0): ?>
+                                <span class="text-muted small">0 <em>(no regs)</em></span>
+                            <?php else: ?>
+                                <?= $row['total_registrations'] ?>
+                            <?php endif; ?>
+                        </td>
+                        <td><?= number_format($row['total_hours'], 1) ?>h</td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <p class="small text-muted mt-2">
+            <i class="bi bi-lightbulb text-green me-1"></i>
+            RIGHT JOIN ensures ALL student users appear, even those who haven't registered for any event yet.
+        </p>
+    </div>
+
+    <!-- 4. FULL OUTER JOIN -->
+    <div class="mb-5">
+        <div class="section-header">
+            <h5 class="fw-sora">
+                <span class="status-badge me-2" style="background:#fde8f8;color:#9b1da8;">FULL OUTER JOIN</span>
+                All Events × All Students (Simulated via UNION)
+            </h5>
+        </div>
+        <div class="p-3 rounded-3 mb-3" style="background:#1c2c1c;border-radius:var(--radius);">
+            <pre class="mb-0" style="color:#5bbf85;font-size:.8rem;white-space:pre-wrap;"><span style="color:#888;">-- MySQL has no FULL OUTER JOIN; simulated with UNION:</span>
+SELECT e.title, u.full_name, r.status
+FROM events e
+LEFT JOIN registrations r ON r.event_id  = e.id
+LEFT JOIN users u         ON r.student_id = u.id
+<span style="color:#f5a623;">UNION</span>
+SELECT e2.title, u2.full_name, r2.status
+FROM users u2
+LEFT JOIN registrations r2 ON r2.student_id = u2.id
+LEFT JOIN events e2        ON r2.event_id   = e2.id
+WHERE u2.role = 'student'
+ORDER BY event_title LIMIT 12;</pre>
+        </div>
+        <div class="buliga-table">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th data-sortable>Event</th>
+                        <th data-sortable>Student</th>
+                        <th data-sortable>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($fullResult as $row): ?>
+                    <tr>
+                        <td class="small">
+                            <?= $row['event_title'] ? htmlspecialchars($row['event_title']) : '<em class="text-muted">NULL</em>' ?>
+                        </td>
+                        <td class="small">
+                            <?= $row['student_name'] ? htmlspecialchars($row['student_name']) : '<em class="text-muted">NULL</em>' ?>
+                        </td>
+                        <td>
+                            <?php if ($row['reg_status']): ?>
+                                <span class="status-badge status-<?= $row['reg_status'] ?>"><?= ucfirst($row['reg_status']) ?></span>
+                            <?php else: ?>
+                                <em class="text-muted small">NULL</em>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <p class="small text-muted mt-2">
+            <i class="bi bi-lightbulb text-green me-1"></i>
+            FULL OUTER JOIN (UNION simulation) returns all events AND all students,
+            with NULLs where no match exists between the two tables.
+        </p>
+    </div>
+
+</div>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
