@@ -85,3 +85,116 @@ $lineData   = array_column($monthly, 'reg_count');
 $pageTitle = 'Organizer Dashboard';
 require_once __DIR__ . '/../includes/header.php';
 ?>
+<div class="page-hero">
+    <div class="container">
+        <h1><i class="bi bi-grid-1x2 me-2"></i>Organizer Dashboard</h1>
+        <p>Welcome, <?= htmlspecialchars($_SESSION['full_name']) ?>! Manage your events and volunteers.</p>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Stat Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-value"><?= $totalEvents ?></div>
+                <div class="stat-label">Total Events</div>
+                <i class="bi bi-calendar-event stat-icon"></i>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-value"><?= $openEvents ?></div>
+                <div class="stat-label">Open Events</div>
+                <i class="bi bi-calendar-check stat-icon"></i>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-value"><?= $totalVols ?></div>
+                <div class="stat-label">Registrations</div>
+                <i class="bi bi-people stat-icon"></i>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-value"><?= $totalApproved ?></div>
+                <div class="stat-label">Approved Vols.</div>
+                <i class="bi bi-person-check stat-icon"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Bar Chart: Registrations per Event -->
+        <div class="col-lg-7">
+            <div class="chart-container">
+                <div class="chart-title"><i class="bi bi-bar-chart me-2"></i>Registrations per Event</div>
+                <canvas id="barChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Doughnut: Event Status -->
+        <div class="col-lg-5">
+            <div class="chart-container">
+                <div class="chart-title"><i class="bi bi-pie-chart me-2"></i>Event Status Overview</div>
+                <canvas id="statusChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Line Chart: Monthly Registrations -->
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <div class="chart-title"><i class="bi bi-graph-up me-2"></i>Monthly Registrations</div>
+                <canvas id="lineChart" height="180"></canvas>
+            </div>
+        </div>
+
+        <!-- Recent Volunteers Table -->
+        <div class="col-lg-6">
+            <div class="section-header">
+                <h5><i class="bi bi-person-lines-fill me-2 text-green"></i>Recent Volunteers</h5>
+            </div>
+            <?php if ($recentVols): ?>
+            <div class="buliga-table">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th data-sortable>Student</th>
+                            <th data-sortable>Event</th>
+                            <th data-sortable>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($recentVols as $v): ?>
+                        <tr>
+                            <td>
+                                <div class="fw-sora" style="font-size:.88rem">
+                                    <?= htmlspecialchars($v['full_name']) ?>
+                                </div>
+                                <div class="small text-muted"><?= htmlspecialchars($v['email']) ?></div>
+                            </td>
+                            <td class="small text-muted">
+                                <?= htmlspecialchars(substr($v['event_title'], 0, 25)) ?>
+                            </td>
+                            <td>
+                                <span class="status-badge status-<?= $v['reg_status'] ?>">
+                                    <?= ucfirst($v['reg_status']) ?>
+                                </span>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php else: ?>
+                <div class="empty-state">
+                    <span class="empty-icon">👥</span>
+                    <p>No volunteers registered yet.</p>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
