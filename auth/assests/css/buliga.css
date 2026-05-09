@@ -55,3 +55,130 @@ a:hover { color: var(--green-deep); }
     color: #fff !important;
     letter-spacing: -0.5px;
 }
+.brand-icon { font-size: 1.3rem; margin-right: 4px; }
+
+.buliga-navbar .nav-link {
+    color: rgba(255,255,255,0.85) !important;
+    font-weight: 500;
+    padding: 0.5rem 0.9rem !important;
+    border-radius: var(--radius-sm);
+    transition: background 0.2s, color 0.2s;
+}
+
+.buliga-navbar .nav-link:hover,
+.buliga-navbar .nav-link.active {
+    background: rgba(255,255,255,0.15);
+    color: #fff !important;
+}
+
+.buliga-navbar .nav-link i { margin-right: 5px; }
+
+.user-nav { color: rgba(255,255,255,0.9) !important; }
+
+.role-badge {
+    background: var(--amber);
+    color: var(--soil);
+    font-family: 'Sora', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+}
+
+.buliga-dropdown {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    padding: 0.5rem;
+}
+
+.buliga-dropdown .dropdown-item {
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.9rem;
+    transition: background 0.15s;
+}
+
+.buliga-dropdown .dropdown-item:hover { background: var(--green-pale); }
+
+/* ---------- Buttons ---------- */
+.btn-buliga {
+    background: var(--amber);
+    color: var(--soil);
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 0.5rem 1.4rem;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+.btn-buliga:hover {
+    background: var(--amber-dark);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(245,166,35,.35);
+}
+
+.btn-green {
+    background: var(--green-mid);
+    color: #fff;
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 0.5rem 1.4rem;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.btn-green:hover {
+    background: var(--green-deep);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.btn-outline-buliga {
+    background: transparent;
+    border: 2px solid var(--green-mid);
+    color: var(--green-mid);
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    border-radius: var(--radius-pill);
+    padding: 0.45rem 1.3rem;
+    transition: all 0.2s;
+}
+
+.btn-outline-buliga:hover {
+    background: var(--green-mid);
+    color: #fff;
+}
+
+/* ---------- Cards ---------- */
+.buliga-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.25s, transform 0.2s;
+    overflow: hidden;
+}
+
+.buliga-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.buliga-card .card-img-top {
+    height: 180px;
+    object-fit: cover;
+}
+
+.event-card-placeholder {
+    height: 180px;
+    background: linear-gradient(135deg, var(--green-pale) 0%, #d4eddf 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+}
