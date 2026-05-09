@@ -226,3 +226,127 @@ a:hover { color: var(--green-deep); }
     opacity: 0.1;
     color: var(--green-deep);
 }
+/* ---------- Page Hero ---------- */
+.page-hero {
+    background: linear-gradient(135deg, var(--green-deep) 0%, #1e7d42 60%, #2d9b5a 100%);
+    color: #fff;
+    padding: 2.5rem 0 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.page-hero::after {
+    content: '🌿';
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 8rem;
+    opacity: 0.08;
+    pointer-events: none;
+}
+
+.page-hero h1 { font-size: 2rem; margin-bottom: 0.4rem; }
+.page-hero p  { opacity: 0.85; margin-bottom: 0; }
+
+/* ---------- Forms ---------- */
+.buliga-form-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    padding: 2.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--text-dark);
+    margin-bottom: 0.35rem;
+}
+
+.form-control, .form-select {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.9rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fdfdfd;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--green-mid);
+    box-shadow: 0 0 0 3px rgba(45,155,90,.15);
+    outline: none;
+}
+
+/* ---------- Badges & Status ---------- */
+.status-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: 'Sora', sans-serif;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.status-open      { background: #d4eddf; color: var(--green-deep); }
+.status-closed    { background: #f0e6d3; color: var(--soil); }
+.status-cancelled { background: #fde8e8; color: #c0392b; }
+.status-pending   { background: #fff4e0; color: var(--amber-dark); }
+.status-approved  { background: #d4eddf; color: var(--green-deep); }
+.status-rejected  { background: #fde8e8; color: #c0392b; }
+.status-completed { background: #e8f0ff; color: #2c5cf7; }
+
+/* ---------- Tables ---------- */
+.buliga-table {
+    background: var(--surface);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+}
+
+.buliga-table thead th {
+    background: var(--green-pale);
+    color: var(--green-deep);
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border);
+    padding: 0.9rem 1rem;
+}
+
+.buliga-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+}
+
+.buliga-table tbody tr:hover { background: var(--green-pale); }
+.buliga-table tbody td { padding: 0.85rem 1rem; vertical-align: middle; }
+
+/* ---------- Alert ---------- */
+.buliga-alert {
+    border-radius: var(--radius);
+    border: none;
+    font-weight: 500;
+}
+
+/* ---------- Section Headers ---------- */
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.section-header h5 {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    margin: 0;
+}
