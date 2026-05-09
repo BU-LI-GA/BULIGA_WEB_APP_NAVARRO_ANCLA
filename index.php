@@ -212,3 +212,35 @@ $siteStats = $statsStmt->fetch();
         </div>
     </div>
 </section>
+<section id="how" class="py-5" style="background:var(--green-pale);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-eyebrow">Simple Process</span>
+            <h2 class="fw-sora" style="font-size:2rem;">How Buliga Works</h2>
+            <p class="text-muted">Three easy steps to start making a difference</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="how-step">
+                    <div class="how-icon">📝</div>
+                    <h5>1. Create an Account</h5>
+                    <p class="text-muted">Sign up as a Student Volunteer or Event Organizer in under a minute.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="how-step">
+                    <div class="how-icon">🔍</div>
+                    <h5>2. Find Your Cause</h5>
+                    <p class="text-muted">Browse and filter volunteer opportunities that match your passion and schedule.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="how-step">
+                    <div class="how-icon">🤝</div>
+                    <h5>3. Show Up & Serve</h5>
+                    <p class="text-muted">Register, get approved, attend the event, and track your volunteer hours.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
