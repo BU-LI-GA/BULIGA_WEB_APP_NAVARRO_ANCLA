@@ -16,3 +16,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+     document.querySelectorAll('[data-search-table]').forEach(input => {
+        const tableId = input.dataset.searchTable;
+        const table = document.querySelector(tableId);
+        if (!table) return;
+
+        input.addEventListener('input', () => {
+            const query = input.value.toLowerCase().trim();
+            table.querySelectorAll('tbody tr').forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
+    });
