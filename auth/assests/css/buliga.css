@@ -30,3 +30,31 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+
+   document.querySelectorAll('th[data-sortable]').forEach(th => {
+        th.style.cursor = 'pointer';
+        th.title = 'Click to sort';
+        let asc = true;
+
+        th.addEventListener('click', () => {
+            const table = th.closest('table');
+            const tbody = table.querySelector('tbody');
+            const idx = [...th.parentElement.children].indexOf(th);
+            const rows = [...tbody.querySelectorAll('tr')];
+
+            rows.sort((a, b) => {
+                const va = a.children[idx]?.innerText.trim() ?? '';
+                const vb = b.children[idx]?.innerText.trim() ?? '';
+                return asc
+                    ? va.localeCompare(vb, undefined, { numeric: true })
+                    : vb.localeCompare(va, undefined, { numeric: true });
+            });
+
+            rows.forEach(r => tbody.appendChild(r));
+            asc = !asc;
+
+            // Update sort icon
+            table.querySelectorAll('th[data-sortable]').forEach(t => t.dataset.sortDir = '');
+            th.dataset.sortDir = asc ? 'desc' : 'asc';
+        });
+    });
