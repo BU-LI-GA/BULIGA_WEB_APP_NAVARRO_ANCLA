@@ -73,3 +73,111 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
         exit;
     }
 }
+
+   $pageTitle = 'Edit Event';
+require_once __DIR__ . '/../includes/header.php';
+?>
+
+<div class="page-hero">
+    <div class="container">
+        <h1><i class="bi bi-pencil-square me-2"></i>Edit Event</h1>
+        <p><?= htmlspecialchars($event['title']) ?></p>
+    </div>
+</div>
+
+<div class="container" style="max-width:760px;">
+    <div class="buliga-form-card">
+        <form method="POST" enctype="multipart/form-data">
+
+            <div class="mb-3">
+                <label class="form-label">Event Title <span class="text-danger">*</span></label>
+                <input type="text" name="title" class="form-control"
+                       value="<?= htmlspecialchars($event['title']) ?>" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description <span class="text-danger">*</span></label>
+                <textarea name="description" class="form-control" rows="4"
+                          required><?= htmlspecialchars($event['description']) ?></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Location <span class="text-danger">*</span></label>
+                <input type="text" name="location" class="form-control"
+                       value="<?= htmlspecialchars($event['location']) ?>" required />
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-sm-4">
+                    <label class="form-label">Event Date</label>
+                    <input type="date" name="event_date" class="form-control"
+                           value="<?= $event['event_date'] ?>" required />
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label">Start Time</label>
+                    <input type="time" name="start_time" class="form-control"
+                           value="<?= $event['start_time'] ?>" required />
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label">End Time</label>
+                    <input type="time" name="end_time" class="form-control"
+                           value="<?= $event['end_time'] ?>" required />
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-sm-6">
+                    <label class="form-label">Volunteer Slots</label>
+                    <input type="number" name="slots" class="form-control" min="1" max="500"
+                           value="<?= $event['slots'] ?>" required />
+                </div>
+                <div class="col-sm-6">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select">
+                        <option value="open"      <?= $event['status'] === 'open'      ? 'selected' : '' ?>>Open</option>
+                        <option value="closed"    <?= $event['status'] === 'closed'    ? 'selected' : '' ?>>Closed</option>
+                        <option value="cancelled" <?= $event['status'] === 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Replace Image <span class="text-muted small">(optional)</span></label>
+                <?php if ($event['image_url']): ?>
+                    <div class="mb-2">
+                        <img src="<?= htmlspecialchars($event['image_url']) ?>"
+                             style="max-height:120px;border-radius:var(--radius-sm);" />
+                    </div>
+                <?php endif; ?>
+                <input type="file" name="image" id="event_image" class="form-control"
+                       accept="image/jpeg,image/png,image/gif,image/webp" />
+                <img id="image_preview" src="" alt="" style="display:none;max-height:160px;border-radius:var(--radius);margin-top:.75rem;" />
+            </div>
+
+            <div class="d-flex gap-2 flex-wrap align-items-center">
+                <button type="submit" class="btn btn-green px-4 py-2">
+                    <i class="bi bi-check2 me-2"></i>Save Changes
+                </button>
+                <a href="/organizer/manage-registrations.php?event_id=<?= $eid ?>"
+                   class="btn btn-outline-buliga">Manage Volunteers</a>
+                <a href="/organizer/send-announcement.php?event_id=<?= $eid ?>"
+                   class="btn btn-outline-buliga">
+                    <i class="bi bi-megaphone me-1"></i>Announce
+                </a>
+                <div class="ms-auto">
+                    <!-- DELETE button -->
+                    <form method="POST" style="display:inline;"
+                          onsubmit="return confirm('Permanently delete this event and all its registrations?')">
+                        <input type="hidden" name="action" value="delete">
+                        <button type="submit" class="btn btn-sm"
+                                style="background:#fde8e8;color:#c0392b;border:1.5px solid #f5c6c6;border-radius:var(--radius-pill);">
+                            <i class="bi bi-trash me-1"></i>Delete Event
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
