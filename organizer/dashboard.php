@@ -55,3 +55,33 @@ $volStmt = $db->prepare("
 ");
 $volStmt->execute([$uid]);
 $recentVols = $volStmt->fetchAll();
+
+// ── Chart 1: Registrations per event (bar) ─────────────────
+$barLabels = array_map(fn($e) => substr($e['title'], 0, 20), $myEvents);
+$barData   = array_map(fn($e) => (int)$e['total_regs'], $myEvents);
+
+// ── Chart 2: Event status distribution (doughnut) ──────────
+$statusOpen      = count(array_filter($myEvents, fn($e) => $e['status'] === 'open'));
+$statusClosed    = count(array_filter($myEvents, fn($e) => $e['status'] === 'closed'));
+$statusCancelled = count(array_filter($myEvents, fn($e) => $e['status'] === 'cancelled'));
+
+// ── Chart 3: Monthly registrations (line) ──────────────────
+$monthlyStmt = $db->prepare("
+    SELECT
+        DATE_FORMAT(r.registered_at, '%b %Y') AS month,
+        COUNT(r.id)                            AS reg_count
+    FROM registrations r
+    INNER JOIN events e ON r.event_id = e.id
+    WHERE e.organizer_id = ?
+    GROUP BY YEAR(r.registered_at), MONTH(r.registered_at)
+    ORDER BY YEAR(r.registered_at), MONTH(r.registered_at)
+    LIMIT 6
+");
+$monthlyStmt->execute([$uid]);
+$monthly = $monthlyStmt->fetchAll();
+$lineLabels = array_column($monthly, 'month');
+$lineData   = array_column($monthly, 'reg_count');
+
+$pageTitle = 'Organizer Dashboard';
+require_once __DIR__ . '/../includes/header.php';
+?>
