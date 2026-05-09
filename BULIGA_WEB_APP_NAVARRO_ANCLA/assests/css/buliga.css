@@ -1,0 +1,33 @@
+
+:root {
+    --green-deep:   #1a6b3c;
+    --green-mid:    #2d9b5a;
+    --green-light:  #5bbf85;
+    --green-pale:   #e8f7ef;
+    --amber:        #f5a623;
+    --amber-dark:   #c47d0e;
+    --amber-light:  #fff4e0;
+    --soil:         #5c3d1e;
+    --cream:        #faf8f3;
+    --text-dark:    #1c2c1c;
+    --text-muted:   #6b7b6b;
+    --surface:      #ffffff;
+    --border:       #d4e8db;
+    --shadow-sm:    0 2px 8px rgba(26,107,60,.08);
+    --shadow-md:    0 6px 24px rgba(26,107,60,.12);
+    --shadow-lg:    0 16px 48px rgba(26,107,60,.16);
+    --radius:       14px;
+    --radius-sm:    8px;
+    --radius-pill:  999px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
