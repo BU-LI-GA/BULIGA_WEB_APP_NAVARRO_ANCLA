@@ -54,3 +54,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
                 }
             }
         }
+   // CRUD: Update event
+        $upd = $db->prepare("
+            UPDATE events
+            SET title=?, description=?, location=?, event_date=?,
+                start_time=?, end_time=?, slots=?, status=?, image_url=?,
+                updated_at=NOW()
+            WHERE id=? AND organizer_id=?
+        ");
+        $upd->execute([
+            $title, $description, $location, $event_date,
+            $start_time, $end_time, $slots, $status, $image_url,
+            $eid, $uid
+        ]);
+
+        setFlash('success', 'Event updated successfully!');
+        header("Location: /organizer/edit-event.php?id=$eid");
+        exit;
+    }
+}
