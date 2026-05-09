@@ -41,3 +41,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 setFlash('error', 'Image must be JPG/PNG/GIF/WEBP under 3MB.');
             }
         }
+
+          // CRUD: Create – INSERT new event
+        $ins = $db->prepare("
+            INSERT INTO events
+                (organizer_id, title, description, location, event_date,
+                 start_time, end_time, slots, image_url, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+        $ins->execute([
+            $uid, $title, $description, $location,
+            $event_date, $start_time, $end_time,
+            $slots, $image_url, $status
+        ]);
+
+        $newId = $db->lastInsertId();
+        setFlash('success', 'Event "' . $title . '" created successfully! 🎉');
+        header("Location: /organizer/manage-registrations.php?event_id=$newId");
+        exit;
+    }
+}
