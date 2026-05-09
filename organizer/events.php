@@ -42,3 +42,115 @@ $events = $stmt->fetchAll();
 $pageTitle = 'My Events';
 require_once __DIR__ . '/../includes/header.php';
 ?>
+
+<div class="container">
+    <!-- Controls -->
+    <div class="d-flex flex-wrap gap-2 align-items-center mb-4">
+        <form method="GET" class="d-flex gap-2 align-items-center flex-wrap">
+            <div class="search-bar">
+                <i class="bi bi-search"></i>
+                <input type="text" name="search" class="form-control"
+                       value="<?= htmlspecialchars($search) ?>"
+                       placeholder="Search events…" style="min-width:220px;" />
+            </div>
+            <select name="status" class="form-select form-select-sm" style="width:auto;">
+                <option value="all"      <?= $status==='all'      ?'selected':'' ?>>All Statuses</option>
+                <option value="open"     <?= $status==='open'     ?'selected':'' ?>>Open</option>
+                <option value="closed"   <?= $status==='closed'   ?'selected':'' ?>>Closed</option>
+                <option value="cancelled"<?= $status==='cancelled'?'selected':'' ?>>Cancelled</option>
+            </select>
+            <button type="submit" class="btn btn-green btn-sm">Filter</button>
+            <?php if ($search || $status !== 'all'): ?>
+                <a href="/organizer/events.php" class="btn btn-outline-buliga btn-sm">Clear</a>
+            <?php endif; ?>
+        </form>
+        <div class="ms-auto">
+            <a href="/organizer/create-event.php" class="btn btn-green">
+                <i class="bi bi-plus me-1"></i>New Event
+            </a>
+        </div>
+    </div>
+
+    <?php if ($events): ?>
+    <div class="buliga-table">
+        <table class="table mb-0">
+            <thead>
+                <tr>
+                    <th data-sortable>Event</th>
+                    <th data-sortable>Date</th>
+                    <th data-sortable>Status</th>
+                    <th data-sortable>Slots</th>
+                    <th data-sortable>Registrations</th>
+                    <th data-sortable>Pending</th>
+                    <th data-sortable>Approved</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($events as $ev): ?>
+                <tr>
+                    <td>
+                        <div class="fw-sora" style="font-size:.92rem">
+                            <?= htmlspecialchars($ev['title']) ?>
+                        </div>
+                        <div class="small text-muted">
+                            <i class="bi bi-geo-alt me-1"></i><?= htmlspecialchars($ev['location']) ?>
+                        </div>
+                    </td>
+                    <td class="small text-muted"><?= date('M d, Y', strtotime($ev['event_date'])) ?></td>
+                    <td>
+                        <span class="status-badge status-<?= $ev['status'] ?>">
+                            <?= ucfirst($ev['status']) ?>
+                        </span>
+                    </td>
+                    <td><?= $ev['slots'] ?></td>
+                    <td><?= $ev['total_regs'] ?></td>
+                    <td>
+                        <?php if ($ev['pending'] > 0): ?>
+                            <span class="status-badge status-pending"><?= $ev['pending'] ?></span>
+                        <?php else: ?>
+                            <span class="text-muted small">—</span>
+                        <?php endif; ?>
+                    </td>
+                    <td><?= $ev['approved'] ?></td>
+                    <td>
+                        <div class="d-flex gap-1 flex-wrap">
+                            <a href="/organizer/manage-registrations.php?event_id=<?= $ev['id'] ?>"
+                               class="btn btn-outline-buliga btn-sm">
+                                <i class="bi bi-people"></i>
+                            </a>
+                            <a href="/organizer/edit-event.php?id=<?= $ev['id'] ?>"
+                               class="btn btn-green btn-sm">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="/organizer/send-announcement.php?event_id=<?= $ev['id'] ?>"
+                               class="btn btn-sm"
+                               style="background:var(--amber-light);color:var(--soil);border:1px solid #f0d090;border-radius:var(--radius-pill);">
+                                <i class="bi bi-megaphone"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Summary row -->
+    <div class="mt-3 text-muted small">
+        Showing <?= count($events) ?> event<?= count($events) !== 1 ? 's' : '' ?>.
+        Total registrations: <strong><?= array_sum(array_column($events, 'total_regs')) ?></strong>
+    </div>
+
+    <?php else: ?>
+        <div class="empty-state">
+            <span class="empty-icon">📅</span>
+            <p>
+                <?= $search ? 'No events match your search.' : "You haven't created any events yet." ?>
+            </p>
+            <a href="/organizer/create-event.php" class="btn btn-green">Create First Event</a>
+        </div>
+    <?php endif; ?>
+</div>
+
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
