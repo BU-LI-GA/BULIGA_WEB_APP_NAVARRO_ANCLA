@@ -141,4 +141,31 @@ function makeBar(canvasId, labels, data, label, color = '#2d9b5a') {
         }
     });
 }
-    
+   function makeLine(canvasId, labels, data, label, color = '#2d9b5a') {
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) return;
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                label,
+                data,
+                borderColor: color,
+                backgroundColor: color + '22',
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: color,
+                pointRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, grid: { color: '#e8f7ef' } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+} 
