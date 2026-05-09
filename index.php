@@ -165,3 +165,50 @@ $siteStats = $statsStmt->fetch();
         </div>
     </div>
 </nav>
+<section class="landing-hero">
+    <div class="container position-relative" style="z-index:2;">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <span class="section-eyebrow" style="color:rgba(255,255,255,.65);">
+                    Community in Action
+                </span>
+                <h1 class="display-3 fw-bold mb-3" style="letter-spacing:-1.5px;">
+                    Volunteer.<br/>Connect.<br/>
+                    <span style="color:var(--amber);">Make Impact.</span>
+                </h1>
+                <p class="lead mb-4" style="max-width:500px;">
+                    Buliga is your campus hub for finding volunteer opportunities, managing registrations,
+                    and tracking your community service journey — all in one place.
+                </p>
+                <div class="hero-cta-wrap mb-5">
+                    <a href="/auth/register.php" class="btn btn-buliga btn-lg px-4 py-2">
+                        <i class="bi bi-person-plus me-2"></i>Join as Volunteer
+                    </a>
+                    <a href="#events" class="btn btn-lg px-4 py-2"
+                       style="background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:var(--radius-pill);">
+                        <i class="bi bi-search me-2"></i>Browse Events
+                    </a>
+                </div>
+
+                <!-- Live Stats -->
+                <div class="d-flex flex-wrap gap-3">
+                    <div class="stat-pill">
+                        <span class="num"><?= number_format($siteStats['total_events']) ?></span>
+                        <span class="lbl">Events Posted</span>
+                    </div>
+                    <div class="stat-pill">
+                        <span class="num"><?= number_format($siteStats['total_volunteers']) ?></span>
+                        <span class="lbl">Volunteers</span>
+                    </div>
+                    <div class="stat-pill">
+                        <span class="num"><?= number_format($siteStats['total_hours']) ?>h</span>
+                        <span class="lbl">Hours Rendered</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
+                <div style="font-size:14rem;opacity:.18;user-select:none;line-height:1;">🌿</div>
+            </div>
+        </div>
+    </div>
+</section>
