@@ -94,8 +94,8 @@ require_once __DIR__ . '/../includes/header.php';
 
 <div class="page-hero">
     <div class="container">
-        <h1><i class="bi bi-database me-2"></i>SQL JOIN Demonstration</h1>
-        <p>Live query results showing INNER, LEFT, RIGHT, and FULL OUTER JOIN — IT26 Requirement</p>
+<h1><i class="bi bi-database me-2"></i>SQL JOIN Demonstration</h1>
+         <p>Live query results showing INNER, LEFT, RIGHT, and FULL OUTER JOIN</p>
     </div>
 </div>
 
