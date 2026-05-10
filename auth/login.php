@@ -53,6 +53,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <div class="auth-wrapper">
+    <!-- Floating volunteer-themed background elements -->
+    <div class="auth-dots">
+        <span style="--i:0;top:15%;left:10%;">🤝</span>
+        <span style="--i:1;top:25%;left:80%;">🌿</span>
+        <span style="--i:2;top:60%;left:5%;">👥</span>
+        <span style="--i:3;top:70%;left:75%;">🤲</span>
+        <span style="--i:4;top:40%;left:90%;">🌱</span>
+        <span style="--i:5;top:85%;left:20%;">💚</span>
+        <span style="--i:6;top:10%;left:50%;">🙌</span>
+        <span style="--i:7;top:55%;left:95%;">🏡</span>
+    </div>
     <div class="auth-card">
         <div class="auth-logo">🌿 Buliga</div>
         <p class="auth-tagline">Sign in to continue volunteering</p>
@@ -66,12 +77,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label class="form-label">Email Address</label>
                 <input type="email" name="email" class="form-control"
                        value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
-                       placeholder="you@buliga.edu" required autofocus />
+                       placeholder="you@buliga.edu" autofocus />
             </div>
             <div class="mb-4">
                 <label class="form-label">Password</label>
                 <input type="password" name="password" class="form-control"
-                       placeholder="••••••••" required />
+                       placeholder="••••••••" />
             </div>
             <button type="submit" class="btn btn-green w-100 py-2 fw-sora">
                 <i class="bi bi-box-arrow-in-right me-2"></i>Log In

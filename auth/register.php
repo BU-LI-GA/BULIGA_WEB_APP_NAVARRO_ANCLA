@@ -60,6 +60,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <div class="auth-wrapper">
+    <!-- Floating volunteer-themed background elements -->
+    <div class="auth-dots">
+        <span style="--i:0;top:15%;left:10%;">🤝</span>
+        <span style="--i:1;top:25%;left:80%;">🌿</span>
+        <span style="--i:2;top:60%;left:5%;">👥</span>
+        <span style="--i:3;top:70%;left:75%;">🤲</span>
+        <span style="--i:4;top:40%;left:90%;">🌱</span>
+        <span style="--i:5;top:85%;left:20%;">💚</span>
+        <span style="--i:6;top:10%;left:50%;">🙌</span>
+        <span style="--i:7;top:55%;left:95%;">🏡</span>
+    </div>
     <div class="auth-card" style="max-width:500px;">
         <div class="auth-logo">🌿 Buliga</div>
         <p class="auth-tagline">Create your volunteer account</p>
@@ -70,19 +81,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <form method="POST" action="">
             <div class="mb-3">
-                <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                <label class="form-label">Full Name</label>
                 <input type="text" name="full_name" class="form-control"
                        value="<?= htmlspecialchars($_POST['full_name'] ?? '') ?>"
-                       placeholder="e.g. Juan Dela Cruz" required />
+                       placeholder="e.g. Juan Dela Cruz" />
             </div>
             <div class="mb-3">
-                <label class="form-label">Email Address <span class="text-danger">*</span></label>
+                <label class="form-label">Email Address</label>
                 <input type="email" name="email" class="form-control"
                        value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
-                       placeholder="you@buliga.edu" required />
+                       placeholder=" " />
             </div>
             <div class="mb-3">
-                <label class="form-label">I am a… <span class="text-danger">*</span></label>
+                <label class="form-label">I am a…</label>
                 <div class="d-flex gap-3">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="role" value="student"
@@ -99,14 +110,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
             <div class="mb-3">
-                <label class="form-label">Password <span class="text-danger">*</span></label>
+                <label class="form-label">Password</label>
                 <input type="password" name="password" class="form-control"
-                       placeholder="Min. 6 characters" required />
+                       placeholder="Min. 6 characters" />
             </div>
             <div class="mb-4">
-                <label class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                <label class="form-label">Confirm Password</label>
                 <input type="password" name="confirm_password" class="form-control"
-                       placeholder="Repeat password" required />
+                       placeholder="Repeat password" />
             </div>
             <button type="submit" class="btn btn-green w-100 py-2 fw-sora">
                 <i class="bi bi-person-plus me-2"></i>Create Account
