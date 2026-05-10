@@ -145,7 +145,14 @@ require_once __DIR__ . '/../includes/header.php';
         <div class="col-lg-5">
             <div class="chart-container">
                 <div class="chart-title"><i class="bi bi-pie-chart me-2"></i>Event Status Overview</div>
-                <canvas id="statusChart" height="200"></canvas>
+                <?php if ($statusOpen + $statusClosed + $statusCancelled > 0): ?>
+                    <canvas id="statusChart" height="200"></canvas>
+                <?php else: ?>
+                    <div class="empty-state py-4">
+                        <span class="empty-icon">📊</span>
+                        <p>No events to display.</p>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -254,23 +261,47 @@ require_once __DIR__ . '/../includes/header.php';
 </div>
 
 <script>
-makeBar('barChart',
-    <?= json_encode(array_values($barLabels)) ?>,
-    <?= json_encode(array_values($barData)) ?>,
-    'Volunteers Registered'
-);
+function initCharts() {
+    // Check if the required functions are defined
+    if (typeof makeBar === 'function' &&
+        typeof makeDoughnut === 'function' &&
+        typeof makeLine === 'function') {
 
-makeDoughnut('statusChart',
-    ['Open', 'Closed', 'Cancelled'],
-    [<?= $statusOpen ?>, <?= $statusClosed ?>, <?= $statusCancelled ?>],
-    ['#2d9b5a', '#f5a623', '#e74c3c']
-);
+        // Bar Chart: Registrations per Event
+        <?php if (!empty($myEvents)): ?>
+        makeBar('barChart',
+            <?= json_encode(array_values($barLabels)) ?>,
+            <?= json_encode(array_values($barData)) ?>,
+            'Volunteers Registered'
+        );
+        <?php endif; ?>
 
-makeLine('lineChart',
-    <?= json_encode(array_values($lineLabels)) ?>,
-    <?= json_encode(array_values($lineData)) ?>,
-    'Registrations'
-);
+        // Doughnut: Event Status
+        <?php if ($statusOpen + $statusClosed + $statusCancelled > 0): ?>
+        makeDoughnut('statusChart',
+            ['Open', 'Closed', 'Cancelled'],
+            [<?= $statusOpen ?>, <?= $statusClosed ?>, <?= $statusCancelled ?>],
+            ['#2d9b5a', '#f5a623', '#e74c3c']
+        );
+        <?php endif; ?>
+
+        // Line Chart: Monthly Registrations
+        <?php if (count($monthly) > 0): ?>
+        makeLine('lineChart',
+            <?= json_encode(array_values($lineLabels)) ?>,
+            <?= json_encode(array_values($lineData)) ?>,
+            'Registrations'
+        );
+        <?php endif; ?>
+
+    } else {
+        // Not ready yet, try again in 100ms
+        setTimeout(initCharts, 100);
+    }
+}
+
+// Start the initialization
+initCharts();
 </script>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

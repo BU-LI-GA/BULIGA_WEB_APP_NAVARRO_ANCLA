@@ -408,7 +408,7 @@ a:hover { color: var(--green-deep); }
 /* ---------- Auth Pages ---------- */
 .auth-wrapper {
     min-height: 100vh;
-    background: linear-gradient(160deg, var(--green-deep) 0%, #1e7d42 50%, var(--green-mid) 100%);
+    background: linear-gradient(135deg, var(--green-deep) 0%, #1e7d42 50%, var(--green-mid) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -523,5 +523,6 @@ a:hover { color: var(--green-deep); }
     .stat-card .stat-value { font-size: 1.7rem; }
     .page-hero h1 { font-size: 1.5rem; }
     .buliga-form-card { padding: 1.5rem; }
-    .auth-card { padding: 1.75rem; }
+    .auth-card { padding: 1.75rem !important; max-width: 380px; }
+    .auth-logo { font-size: 1.8rem; }
 }
