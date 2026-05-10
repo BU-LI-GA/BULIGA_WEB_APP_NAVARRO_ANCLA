@@ -90,19 +90,19 @@ require_once __DIR__ . '/../includes/header.php';
         <form method="POST" enctype="multipart/form-data">
 
             <div class="mb-3">
-                <label class="form-label">Event Title <span class="text-danger">*</span></label>
+                <label class="form-label">Event Title</label>
                 <input type="text" name="title" class="form-control"
                        value="<?= htmlspecialchars($event['title']) ?>" required />
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Description <span class="text-danger">*</span></label>
+                <label class="form-label">Description</label>
                 <textarea name="description" class="form-control" rows="4"
                           required><?= htmlspecialchars($event['description']) ?></textarea>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Location <span class="text-danger">*</span></label>
+                <label class="form-label">Location</label>
                 <input type="text" name="location" class="form-control"
                        value="<?= htmlspecialchars($event['location']) ?>" required />
             </div>

@@ -362,6 +362,74 @@ a:hover { color: var(--green-deep); }
     color: #fff;
 }
 
+/* Enhanced background patterns for landing hero */
+.landing-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Enhanced floating background blobs for hero */
+.landing-hero::after {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 50%);
+    top: -150px;
+    right: -100px;
+    border-radius: 50%;
+    animation: heroFloatA 16s ease-in-out infinite;
+    z-index: 0;
+}
+
+.landing-hero .hero-float-wrap {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index 0;
+}
+
+/* Enhanced floating elements with more variety */
+.landing-hero .hero-float-wrap span {
+    position: absolute;
+    font-size: 2.2rem;
+    opacity: 0.06;
+    animation: heroFloatDot 10s ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * 1.5s);
+}
+
+/* Additional floating layer */
+.landing-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(255,255,255,0.06) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+/* Enhanced keyframes */
+@keyframes heroFloatA {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(-50px, 40px) scale(1.2); }
+    50% { transform: translate(30px, -30px) scale(0.85); }
+    75% { transform: translate(-10px, 20px) scale(1.1); }
+}
+
+@keyframes heroFloatDot {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.04; }
+    20% { transform: translateY(-25px) rotate(10deg); opacity: 0.08; }
+    40% { transform: translateY(-40px) rotate(-5deg); opacity: 0.06; }
+    60% { transform: translateY(-30px) rotate(15deg); opacity: 0.1; }
+    80% { transform: translateY(-15px) rotate(-10deg); opacity: 0.07; }
+}
+
 .landing-hero::before {
     content: '';
     position: absolute;
@@ -439,7 +507,7 @@ a:hover { color: var(--green-deep); }
 /* ---------- Auth Pages ---------- */
 .auth-wrapper {
     min-height: 100vh;
-    background: linear-gradient(160deg, var(--green-deep) 0%, #1e7d42 50%, var(--green-mid) 100%);
+    background: linear-gradient(160deg, var(--green-deep) 0%, #1e7d42 30%, var(--green-mid) 70%, #2d9b5a 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -448,106 +516,96 @@ a:hover { color: var(--green-deep); }
     overflow: hidden;
 }
 
-/* Animated floating volunteer shapes */
+/* Enhanced background patterns for auth pages */
+.auth-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Enhanced floating volunteer shapes with more complexity */
 .auth-wrapper::before,
 .auth-wrapper::after {
     content: '';
     position: absolute;
     border-radius: 50%;
-    opacity: 0.15;
+    opacity: 0.12;
     pointer-events: none;
     z-index: 0;
 }
 
 .auth-wrapper::before {
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, #fff 0%, transparent 70%);
-    top: -80px;
-    left: -60px;
-    animation: floatBlobA 8s ease-in-out infinite;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.18) 0%, transparent 50%);
+    top: -100px;
+    left: -80px;
+    animation: floatBlobA 10s ease-in-out infinite;
 }
 
 .auth-wrapper::after {
-    width: 220px;
-    height: 220px;
-    background: radial-gradient(circle, #fff 0%, transparent 70%);
-    bottom: -60px;
-    right: -40px;
-    animation: floatBlobB 10s ease-in-out infinite;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle at 70% 70%, rgba(255,255,255,0.15) 0%, transparent 50%);
+    bottom: -80px;
+    right: -60px;
+    animation: floatBlobB 12s ease-in-out infinite;
 }
 
-/* Additional floating elements via box shadows */
-.auth-wrapper .auth-card {
-    position: relative;
-    z-index: 1;
-}
-
-/* Small floating accent dots */
-.auth-dots {
+/* Additional decorative elements */
+.auth-wrapper::after {
+    content: '';
     position: absolute;
-    inset: 0;
-    pointer-events: none;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle at 40% 60%, rgba(255,255,255,0.12) 0%, transparent 50%);
+    top: 30%;
+    left: 10%;
+    animation: floatBlobC 15s ease-in-out infinite;
     z-index: 0;
-    overflow: hidden;
 }
 
+/* Enhanced floating dots with more variety */
 .auth-dots span {
     position: absolute;
     display: block;
-    font-size: 1.4rem;
-    opacity: 0.2;
-    animation: floatDot 6s ease-in-out infinite;
-    animation-delay: calc(var(--i, 0) * 0.8s);
+    font-size: 1.6rem;
+    opacity: 0.18;
+    animation: floatDot 7s ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * 0.9s);
 }
 
+/* Enhanced keyframes for more dynamic movement */
 @keyframes floatBlobA {
-    0%, 100% {
-        transform: translate(0, 0) scale(1);
-    }
-    25% {
-        transform: translate(30px, -20px) scale(1.1);
-    }
-    50% {
-        transform: translate(10px, 30px) scale(0.95);
-    }
-    75% {
-        transform: translate(-20px, 10px) scale(1.05);
-    }
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    20% { transform: translate(35px, -25px) scale(1.1); }
+    40% { transform: translate(15px, 35px) scale(0.9); }
+    60% { transform: translate(-25px, 15px) scale(1.05); }
+    80% { transform: translate(10px, -30px) scale(0.95); }
 }
 
 @keyframes floatBlobB {
-    0%, 100% {
-        transform: translate(0, 0) scale(1);
-    }
-    25% {
-        transform: translate(-25px, 15px) scale(0.9);
-    }
-    50% {
-        transform: translate(15px, -25px) scale(1.1);
-    }
-    75% {
-        transform: translate(-10px, -10px) scale(0.95);
-    }
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(-30px, 20px) scale(0.95); }
+    50% { transform: translate(20px, -30px) scale(1.05); }
+    75% { transform: translate(-15px, 10px) scale(0.9); }
+}
+
+@keyframes floatBlobC {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -10px) scale(1.1); }
+    66% { transform: translate(-20px, 30px) scale(0.9); }
 }
 
 @keyframes floatDot {
-    0%, 100% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0.15;
-    }
-    25% {
-        transform: translateY(-20px) rotate(15deg);
-        opacity: 0.35;
-    }
-    50% {
-        transform: translateY(-40px) rotate(0deg);
-        opacity: 0.2;
-    }
-    75% {
-        transform: translateY(-20px) rotate(-15deg);
-        opacity: 0.3;
-    }
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.1; }
+    25% { transform: translateY(-20px) rotate(15deg); opacity: 0.25; }
+    50% { transform: translateY(-35px) rotate(0deg); opacity: 0.15; }
+    75% { transform: translateY(-15px) rotate(-15deg); opacity: 0.2; }
 }
 
 .auth-card {
@@ -650,4 +708,14 @@ a:hover { color: var(--green-deep); }
     .page-hero h1 { font-size: 1.5rem; }
     .buliga-form-card { padding: 1.5rem; }
     .auth-card { padding: 1.75rem; }
+}
+
+/* ---------- Chrome Autofill Fix ---------- */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #fdfdfd inset !important;
+    -webkit-text-fill-color: var(--text-dark) !important;
+    transition: background-color 5000s ease-in-out 0s;
 }

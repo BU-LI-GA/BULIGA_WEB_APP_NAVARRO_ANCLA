@@ -78,21 +78,21 @@ require_once __DIR__ . '/../includes/header.php';
         <form method="POST" enctype="multipart/form-data">
 
             <div class="mb-3">
-                <label class="form-label">Event Title <span class="text-danger">*</span></label>
+                <label class="form-label">Event Title</label>
                 <input type="text" name="title" class="form-control"
                        value="<?= htmlspecialchars($_POST['title'] ?? '') ?>"
                        placeholder="e.g. Coastal Clean-Up Drive" required />
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Description <span class="text-danger">*</span></label>
+                <label class="form-label">Description</label>
                 <textarea name="description" class="form-control" rows="4"
                           placeholder="Describe the event, its goals, and what volunteers will do…"
                           required><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Location <span class="text-danger">*</span></label>
+                <label class="form-label">Location</label>
                 <input type="text" name="location" class="form-control"
                        value="<?= htmlspecialchars($_POST['location'] ?? '') ?>"
                        placeholder="e.g. Macajalar Bay, CDO" required />
@@ -100,18 +100,18 @@ require_once __DIR__ . '/../includes/header.php';
 
             <div class="row g-3 mb-3">
                 <div class="col-sm-4">
-                    <label class="form-label">Event Date <span class="text-danger">*</span></label>
+                    <label class="form-label">Event Date</label>
                     <input type="date" name="event_date" class="form-control"
                            value="<?= htmlspecialchars($_POST['event_date'] ?? '') ?>"
                            min="<?= date('Y-m-d') ?>" required />
                 </div>
                 <div class="col-sm-4">
-                    <label class="form-label">Start Time <span class="text-danger">*</span></label>
+                    <label class="form-label">Start Time</label>
                     <input type="time" name="start_time" class="form-control"
                            value="<?= htmlspecialchars($_POST['start_time'] ?? '') ?>" required />
                 </div>
                 <div class="col-sm-4">
-                    <label class="form-label">End Time <span class="text-danger">*</span></label>
+                    <label class="form-label">End Time</label>
                     <input type="time" name="end_time" class="form-control"
                            value="<?= htmlspecialchars($_POST['end_time'] ?? '') ?>" required />
                 </div>
@@ -119,7 +119,7 @@ require_once __DIR__ . '/../includes/header.php';
 
             <div class="row g-3 mb-3">
                 <div class="col-sm-6">
-                    <label class="form-label">Volunteer Slots <span class="text-danger">*</span></label>
+                    <label class="form-label">Volunteer Slots</label>
                     <input type="number" name="slots" class="form-control" min="1" max="500"
                            value="<?= (int)($_POST['slots'] ?? 20) ?>" required />
                 </div>

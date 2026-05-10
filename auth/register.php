@@ -61,36 +61,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <div class="auth-wrapper">
     <!-- Floating volunteer-themed background elements -->
-    <div class="auth-dots">
-        <span style="--i:0;top:15%;left:10%;">🤝</span>
-        <span style="--i:1;top:25%;left:80%;">🌿</span>
-        <span style="--i:2;top:60%;left:5%;">👥</span>
-        <span style="--i:3;top:70%;left:75%;">🤲</span>
-        <span style="--i:4;top:40%;left:90%;">🌱</span>
-        <span style="--i:5;top:85%;left:20%;">💚</span>
-        <span style="--i:6;top:10%;left:50%;">🙌</span>
-        <span style="--i:7;top:55%;left:95%;">🏡</span>
-    </div>
+     <div class="auth-dots" style="display:none;">
+         <span style="--i:0;top:15%;left:10%;"></span>
+         <span style="--i:1;top:25%;left:80%;"></span>
+         <span style="--i:2;top:60%;left:5%;"></span>
+         <span style="--i:3;top:70%;left:75%;"></span>
+         <span style="--i:4;top:40%;left:90%;"></span>
+         <span style="--i:5;top:85%;left:20%;"></span>
+         <span style="--i:6;top:10%;left:50%;"></span>
+         <span style="--i:7;top:55%;left:95%;"></span>
+     </div>
     <div class="auth-card" style="max-width:500px;">
-        <div class="auth-logo">🌿 Buliga</div>
+        <div class="auth-logo">Buliga</div>
         <p class="auth-tagline">Create your volunteer account</p>
 
         <?php if ($error): ?>
             <div class="alert alert-danger rounded-3 py-2 mb-3 small"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="">
+        <form method="POST" action="" autocomplete="off">
             <div class="mb-3">
                 <label class="form-label">Full Name</label>
                 <input type="text" name="full_name" class="form-control"
                        value="<?= htmlspecialchars($_POST['full_name'] ?? '') ?>"
-                       placeholder="e.g. Juan Dela Cruz" />
+                       placeholder="e.g. Juan Dela Cruz" autocomplete="off" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Email Address</label>
                 <input type="email" name="email" class="form-control"
                        value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
-                       placeholder=" " />
+                       placeholder=" " autocomplete="off" />
             </div>
             <div class="mb-3">
                 <label class="form-label">I am a…</label>
@@ -99,25 +99,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input class="form-check-input" type="radio" name="role" value="student"
                                id="role_student"
                                <?= (($_POST['role'] ?? 'student') === 'student') ? 'checked' : '' ?>>
-                        <label class="form-check-label" for="role_student">🎓 Student Volunteer</label>
+                        <label class="form-check-label" for="role_student">Student Volunteer</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="role" value="organizer"
                                id="role_organizer"
                                <?= (($_POST['role'] ?? '') === 'organizer') ? 'checked' : '' ?>>
-                        <label class="form-check-label" for="role_organizer">🧑‍💼 Event Organizer</label>
+                        <label class="form-check-label" for="role_organizer">Event Organizer</label>
                     </div>
                 </div>
             </div>
             <div class="mb-3">
                 <label class="form-label">Password</label>
                 <input type="password" name="password" class="form-control"
-                       placeholder="Min. 6 characters" />
+                       placeholder="Min. 6 characters" autocomplete="new-password" />
             </div>
             <div class="mb-4">
                 <label class="form-label">Confirm Password</label>
                 <input type="password" name="confirm_password" class="form-control"
-                       placeholder="Repeat password" />
+                       placeholder="Repeat password" autocomplete="new-password" />
             </div>
             <button type="submit" class="btn btn-green w-100 py-2 fw-sora">
                 <i class="bi bi-person-plus me-2"></i>Create Account

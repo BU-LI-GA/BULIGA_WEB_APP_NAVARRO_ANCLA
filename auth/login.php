@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['email']     = $user['email'];
             $_SESSION['role']      = $user['role'];
 
-            setFlash('success', 'Welcome back, ' . $user['full_name'] . '! 🌿');
+            setFlash('success', 'Welcome back, ' . $user['full_name'] . '!');
             header('Location: /' . $user['role'] . '/dashboard.php');
             exit;
         } else {
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <div class="auth-wrapper">
     <!-- Floating volunteer-themed background elements -->
-    <div class="auth-dots">
+    <div class="auth-dots" style="display:none;">
         <span style="--i:0;top:15%;left:10%;">🤝</span>
         <span style="--i:1;top:25%;left:80%;">🌿</span>
         <span style="--i:2;top:60%;left:5%;">👥</span>
@@ -65,24 +65,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <span style="--i:7;top:55%;left:95%;">🏡</span>
     </div>
     <div class="auth-card">
-        <div class="auth-logo">🌿 Buliga</div>
+        <div class="auth-logo">Buliga</div>
         <p class="auth-tagline">Sign in to continue volunteering</p>
 
         <?php if ($error): ?>
             <div class="alert alert-danger rounded-3 py-2 mb-3 small"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="">
+        <form method="POST" action="" autocomplete="off">
             <div class="mb-3">
                 <label class="form-label">Email Address</label>
                 <input type="email" name="email" class="form-control"
                        value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
-                       placeholder="you@buliga.edu" autofocus />
+                       placeholder="you@buliga.edu" autofocus autocomplete="off" />
             </div>
             <div class="mb-4">
                 <label class="form-label">Password</label>
                 <input type="password" name="password" class="form-control"
-                       placeholder="••••••••" />
+                       placeholder="••••••••" autocomplete="current-password" />
             </div>
             <button type="submit" class="btn btn-green w-100 py-2 fw-sora">
                 <i class="bi bi-box-arrow-in-right me-2"></i>Log In

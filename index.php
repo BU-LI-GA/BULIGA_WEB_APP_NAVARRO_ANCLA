@@ -123,10 +123,10 @@ $siteStats = $statsStmt->fetch();
             overflow: hidden;
         }
         .cta-section::before {
-            content:'🌿';
-            position:absolute; right:3%; bottom:-10px;
-            font-size:8rem; opacity:.07; pointer-events:none;
-        }
+             content:'';
+             position:absolute; right:3%; bottom:-10px;
+             font-size:8rem; opacity:.07; pointer-events:none;
+         }
 
         /* Animated underline on hero CTA */
         .hero-cta-wrap { display:flex; gap:1rem; flex-wrap:wrap; }
@@ -166,16 +166,16 @@ $siteStats = $statsStmt->fetch();
     </div>
 </nav>
 <section class="landing-hero">
-    <div class="hero-float-wrap">
-        <span style="--i:0;top:10%;left:8%;">🌿</span>
-        <span style="--i:1;top:20%;left:85%;">🤝</span>
-        <span style="--i:2;top:40%;left:5%;">👥</span>
-        <span style="--i:3;top:65%;left:90%;">🌱</span>
-        <span style="--i:4;top:75%;left:12%;">💚</span>
-        <span style="--i:5;top:30%;left:92%;">🙌</span>
-        <span style="--i:6;top:80%;left:45%;">🤲</span>
-        <span style="--i:7;top:15%;left:50%;">🏡</span>
-    </div>
+     <div class="hero-float-wrap">
+         <span style="--i:0;top:10%;left:8%;"></span>
+         <span style="--i:1;top:20%;left:85%;"></span>
+         <span style="--i:2;top:40%;left:5%;"></span>
+         <span style="--i:3;top:65%;left:90%;"></span>
+         <span style="--i:4;top:75%;left:12%;"></span>
+         <span style="--i:5;top:30%;left:92%;"></span>
+         <span style="--i:6;top:80%;left:45%;"></span>
+         <span style="--i:7;top:15%;left:50%;"></span>
+     </div>
     <div class="container position-relative" style="z-index:2;">
         <div class="row align-items-center">
             <div class="col-lg-7">
