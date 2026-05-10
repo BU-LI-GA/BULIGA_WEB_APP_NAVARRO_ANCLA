@@ -1,7 +1,7 @@
 <?php
 // ============================================================
-// organizer/events.php – Organizer's Events List
-// Demonstrates: LEFT JOIN with GROUP BY aggregation, filtering
+// organizer/events.php – All Events by This Organizer
+// Demonstrates: LEFT JOIN, search, sort, full CRUD controls
 // ============================================================
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../config/db.php';
@@ -25,23 +25,16 @@ if (in_array($status, ['open','closed','cancelled'])) {
     $params[] = $status;
 }
 
-// ============================================================
-// QUERY: Events with Registration Summary
-// JOIN TYPE: LEFT JOIN (events ← registrations)
-// PURPOSE:  Show all organizer's events, INCLUDING those with
-//           zero registrations. LEFT JOIN + COUNT() gives us
-//           the volunteer count per event (0 if none).
-// AGGREGATION: GROUP BY e.id allows COUNT and SUM on registrations
-// ============================================================
+// ── LEFT JOIN: Events with registration count ──────────────
 $stmt = $db->prepare("
     SELECT
         e.*,
-        COUNT(r.id) AS total_regs,
-        SUM(CASE WHEN r.status='approved'  THEN 1 ELSE 0 END) AS approved,
-        SUM(CASE WHEN r.status='pending'   THEN 1 ELSE 0 END) AS pending,
-        SUM(CASE WHEN r.status='completed' THEN 1 ELSE 0 END) AS completed
+        COUNT(r.id)                                              AS total_regs,
+        SUM(CASE WHEN r.status='approved'  THEN 1 ELSE 0 END)   AS approved,
+        SUM(CASE WHEN r.status='pending'   THEN 1 ELSE 0 END)   AS pending,
+        SUM(CASE WHEN r.status='completed' THEN 1 ELSE 0 END)   AS completed
     FROM events e
-    LEFT JOIN registrations r ON r.event_id = e.id     -- LEFT JOIN: keep events even with 0 regs
+    LEFT JOIN registrations r ON r.event_id = e.id              -- LEFT JOIN: 0-reg events included
     WHERE " . implode(' AND ', $where) . "
     GROUP BY e.id
     ORDER BY e.event_date DESC
@@ -52,6 +45,13 @@ $events = $stmt->fetchAll();
 $pageTitle = 'My Events';
 require_once __DIR__ . '/../includes/header.php';
 ?>
+
+<div class="page-hero">
+    <div class="container">
+        <h1><i class="bi bi-calendar-event me-2"></i>My Events</h1>
+        <p>Create, edit, and manage all your volunteer events.</p>
+    </div>
+</div>
 
 <div class="container">
     <!-- Controls -->

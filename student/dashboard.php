@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // ============================================================
 // student/dashboard.php – Student Volunteer Dashboard
 // Demonstrates: INNER JOIN, LEFT JOIN, aggregation, Chart.js
@@ -10,14 +10,8 @@ requireRole('student');
 $db  = getDB();
 $uid = currentUserId();
 
-// ============================================================
-// QUERY 1: My Recent Registrations
-// JOIN TYPE: INNER JOIN (registrations × events)
-// PURPOSE:  Show only registrations where the student has a
-//           valid event. Excludes orphaned registrations (should
-//           be impossible due to FK, but INNER JOIN guarantees data integrity).
-// RESULT:   Rows exist ONLY when BOTH registration AND event match.
-// ============================================================
+// ── INNER JOIN: Get student's registrations with event details ──
+// Shows only events the student has registered for (intersection).
 $regStmt = $db->prepare("
     SELECT
         r.id              AS reg_id,
@@ -29,24 +23,16 @@ $regStmt = $db->prepare("
         e.location,
         e.status          AS event_status
     FROM registrations r
-    INNER JOIN events e ON r.event_id = e.id           -- INNER JOIN: both tables must match
-    WHERE r.student_id = ?                             -- Filter to THIS student
+    INNER JOIN events e ON r.event_id = e.id   -- INNER JOIN: only matched rows
+    WHERE r.student_id = ?
     ORDER BY e.event_date DESC
     LIMIT 5
 ");
 $regStmt->execute([$uid]);
 $recentRegs = $regStmt->fetchAll();
 
-// ============================================================
-// QUERY 2: Upcoming Open Events with My Registration Status
-// JOIN TYPE: LEFT JOIN (events ← registrations) + INNER JOIN (events → users)
-// PURPOSE:  Show ALL open, future events plus whether THIS student
-//           has registered. LEFT JOIN preserves events with no
-//           registration; reg_status will be NULL if not registered.
-// PATTERN:  LEFT JOIN with additional filter on the ON clause
-//           (r.student_id = ?) ensures we only get THIS student's
-//           registration if it exists.
-// ============================================================
+// ── LEFT JOIN: All events with student's registration status ──
+// Shows every open event; null columns if student hasn't registered.
 $upcomingStmt = $db->prepare("
     SELECT
         e.id,
@@ -55,25 +41,21 @@ $upcomingStmt = $db->prepare("
         e.location,
         e.slots,
         e.status          AS event_status,
-        r.status          AS reg_status,              -- NULL if student hasn't registered
+        r.status          AS reg_status,       -- NULL if not registered
         u.full_name       AS organizer_name
     FROM events e
-    LEFT JOIN registrations r                          -- LEFT JOIN: keep ALL events
-        ON r.event_id = e.id AND r.student_id = ?      -- only my registration (if any)
-    INNER JOIN users u ON e.organizer_id = u.id        -- INNER JOIN: must have organizer
+    LEFT JOIN registrations r                  -- LEFT JOIN: keep all events
+        ON r.event_id = e.id AND r.student_id = ?
+    INNER JOIN users u ON e.organizer_id = u.id -- INNER JOIN: organizer info
     WHERE e.status = 'open'
-      AND e.event_date >= CURDATE()                   -- Only future events
+      AND e.event_date >= CURDATE()
     ORDER BY e.event_date ASC
     LIMIT 4
 ");
 $upcomingStmt->execute([$uid]);
 $upcomingEvents = $upcomingStmt->fetchAll();
 
-// ============================================================
-// QUERY 3: Student Registration Statistics
-// JOIN TYPE: None (single table)
-// PURPOSE:  Aggregate statistics from registrations table only.
-// ============================================================
+// ── Stats ──────────────────────────────────────────────────
 $statsStmt = $db->prepare("
     SELECT
         COUNT(*)                                              AS total_regs,
@@ -87,23 +69,17 @@ $statsStmt = $db->prepare("
 $statsStmt->execute([$uid]);
 $stats = $statsStmt->fetch();
 
-// Chart data preparation
+// ── Chart data: registrations by status ───────────────────
 $chartLabels = ['Pending', 'Approved', 'Completed', 'Rejected'];
 $chartData   = [
     (int)$stats['pending'],
     (int)$stats['approved'],
     (int)$stats['completed'],
-    0   // rejected – could fetch separately if needed
+    0   // rejected – fetch separately if needed
 ];
 
-// ============================================================
-// QUERY 4: My Announcements (Multi-table INNER JOIN)
-// JOIN TYPE: INNER JOIN × 3 tables
-// PURPOSE:  Show announcements ONLY for events THIS student has
-//           registered for. Requires announcement → event link,
-//           event → registration link, and announcement → author link.
-// RESULT:   Only announcements from registered events appear.
-// ============================================================
+// ── Announcements via INNER JOIN ───────────────────────────
+// Only announcements for events the student is registered to.
 $annStmt = $db->prepare("
     SELECT
         a.title        AS ann_title,
@@ -112,10 +88,10 @@ $annStmt = $db->prepare("
         e.title        AS event_title,
         u.full_name    AS author
     FROM announcements a
-    INNER JOIN events e        ON a.event_id  = e.id     -- Event must exist
-    INNER JOIN registrations r ON r.event_id  = e.id     -- Student must be registered
-    INNER JOIN users u         ON a.author_id = u.id    -- Author must exist
-    WHERE r.student_id = ?                              -- Only MY registrations
+    INNER JOIN events e        ON a.event_id  = e.id     -- INNER JOIN: event info
+    INNER JOIN registrations r ON r.event_id  = e.id     -- INNER JOIN: only registered events
+    INNER JOIN users u         ON a.author_id = u.id     -- INNER JOIN: author info
+    WHERE r.student_id = ?
     ORDER BY a.created_at DESC
     LIMIT 5
 ");

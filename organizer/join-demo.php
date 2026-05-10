@@ -1,5 +1,9 @@
 <?php
-
+// ============================================================
+// organizer/join-demo.php – SQL JOIN Demonstration Page
+// Required for IT26: Shows INNER, LEFT, RIGHT, FULL OUTER JOIN
+// with live query results and annotated SQL comments.
+// ============================================================
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../config/db.php';
 requireRole('organizer');
@@ -7,6 +11,9 @@ requireRole('organizer');
 $db  = getDB();
 $uid = currentUserId();
 
+// ── 1. INNER JOIN ─────────────────────────────────────────
+// Returns ONLY rows that have matching values in BOTH tables.
+// Here: registrations that have both a matching student AND a matching event.
 $innerSQL = "
 SELECT
     r.id          AS reg_id,
@@ -20,7 +27,9 @@ ORDER BY r.id
 LIMIT 8";
 $innerResult = $db->query($innerSQL)->fetchAll();
 
-
+// ── 2. LEFT JOIN ──────────────────────────────────────────
+// Returns ALL rows from the LEFT table (events), plus matching
+// rows from the RIGHT table (registrations). NULLs if no match.
 $leftSQL = "
 SELECT
     e.id          AS event_id,
@@ -34,7 +43,10 @@ ORDER BY registration_count DESC
 LIMIT 8";
 $leftResult = $db->query($leftSQL)->fetchAll();
 
-
+// ── 3. RIGHT JOIN ─────────────────────────────────────────
+// Returns ALL rows from the RIGHT table (users/students), plus
+// matching rows from the LEFT table (registrations). NULLs if
+// the student has no registrations at all.
 $rightSQL = "
 SELECT
     u.full_name   AS student_name,
@@ -49,7 +61,9 @@ ORDER BY total_registrations DESC
 LIMIT 8";
 $rightResult = $db->query($rightSQL)->fetchAll();
 
-
+// ── 4. FULL OUTER JOIN (simulated with UNION) ─────────────
+// MySQL has no native FULL OUTER JOIN, so we simulate with
+// LEFT JOIN UNION RIGHT JOIN to get all rows from both tables.
 $fullSQL = "
 -- Full Outer Join: All events + all students (matched where possible)
 SELECT
@@ -77,6 +91,7 @@ $fullResult = $db->query($fullSQL)->fetchAll();
 $pageTitle = 'SQL JOIN Demo';
 require_once __DIR__ . '/../includes/header.php';
 ?>
+
 <div class="page-hero">
     <div class="container">
         <h1><i class="bi bi-database me-2"></i>SQL JOIN Demonstration</h1>
@@ -117,7 +132,7 @@ require_once __DIR__ . '/../includes/header.php';
         </div>
     </div>
 
-      <!-- 1. INNER JOIN -->
+    <!-- 1. INNER JOIN -->
     <div class="mb-5">
         <div class="section-header">
             <h5 class="fw-sora">
@@ -159,10 +174,9 @@ ORDER BY r.id LIMIT 8;</pre>
             INNER JOIN returns only the <?= count($innerResult) ?> registrations where both a matching student AND a matching event exist.
             Orphaned rows (e.g., deleted users) would be excluded.
         </p>
-    </
-    
-    
-     <!-- 2. LEFT JOIN -->
+    </div>
+
+    <!-- 2. LEFT JOIN -->
     <div class="mb-5">
         <div class="section-header">
             <h5 class="fw-sora">
@@ -208,9 +222,8 @@ GROUP BY e.id ORDER BY registration_count DESC LIMIT 8;</pre>
             The COUNT(r.id) returns 0 (not NULL) due to GROUP BY aggregation.
         </p>
     </div>
-div>
 
- <!-- 3. RIGHT JOIN -->
+    <!-- 3. RIGHT JOIN -->
     <div class="mb-5">
         <div class="section-header">
             <h5 class="fw-sora">
@@ -319,4 +332,5 @@ ORDER BY event_title LIMIT 12;</pre>
     </div>
 
 </div>
+
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

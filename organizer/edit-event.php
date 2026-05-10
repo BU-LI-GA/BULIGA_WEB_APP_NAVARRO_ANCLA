@@ -1,5 +1,8 @@
 <?php
-
+// ============================================================
+// organizer/edit-event.php – Edit & Delete Event
+// Demonstrates: CRUD Update (UPDATE) and Delete (DELETE)
+// ============================================================
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../config/db.php';
 requireRole('organizer');
@@ -26,8 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delet
     exit;
 }
 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delete') {
+// Handle EDIT (UPDATE)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'edit') {
     $title       = trim($_POST['title'] ?? '');
     $description = trim($_POST['description'] ?? '');
     $location    = trim($_POST['location'] ?? '');
@@ -42,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
     } else {
         $image_url = $event['image_url'];
 
+        // New image uploaded?
         if (!empty($_FILES['image']['name'])) {
             $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
             $mime    = $_FILES['image']['type'];
@@ -54,7 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
                 }
             }
         }
-   // CRUD: Update event
+
+        // CRUD: Update event
         $upd = $db->prepare("
             UPDATE events
             SET title=?, description=?, location=?, event_date=?,
@@ -74,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') !== 'delet
     }
 }
 
-   $pageTitle = 'Edit Event';
+$pageTitle = 'Edit Event';
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
@@ -90,19 +95,19 @@ require_once __DIR__ . '/../includes/header.php';
         <form method="POST" enctype="multipart/form-data">
 
             <div class="mb-3">
-                <label class="form-label">Event Title</label>
+                <label class="form-label">Event Title <span class="text-danger">*</span></label>
                 <input type="text" name="title" class="form-control"
                        value="<?= htmlspecialchars($event['title']) ?>" required />
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Description</label>
+                <label class="form-label">Description <span class="text-danger">*</span></label>
                 <textarea name="description" class="form-control" rows="4"
                           required><?= htmlspecialchars($event['description']) ?></textarea>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Location</label>
+                <label class="form-label">Location <span class="text-danger">*</span></label>
                 <input type="text" name="location" class="form-control"
                        value="<?= htmlspecialchars($event['location']) ?>" required />
             </div>
@@ -155,7 +160,7 @@ require_once __DIR__ . '/../includes/header.php';
             </div>
 
             <div class="d-flex gap-2 flex-wrap align-items-center">
-                <button type="submit" class="btn btn-green px-4 py-2">
+                <button type="submit" name="action" value="edit" class="btn btn-green px-4 py-2">
                     <i class="bi bi-check2 me-2"></i>Save Changes
                 </button>
                 <a href="/organizer/manage-registrations.php?event_id=<?= $eid ?>"
@@ -164,19 +169,20 @@ require_once __DIR__ . '/../includes/header.php';
                    class="btn btn-outline-buliga">
                     <i class="bi bi-megaphone me-1"></i>Announce
                 </a>
-                <div class="ms-auto">
-                    <!-- DELETE button -->
-                    <form method="POST" style="display:inline;"
-                          onsubmit="return confirm('Permanently delete this event and all its registrations?')">
-                        <input type="hidden" name="action" value="delete">
-                        <button type="submit" class="btn btn-sm"
-                                style="background:#fde8e8;color:#c0392b;border:1.5px solid #f5c6c6;border-radius:var(--radius-pill);">
-                            <i class="bi bi-trash me-1"></i>Delete Event
-                        </button>
-                    </form>
-                </div>
             </div>
         </form>
+
+        <!-- DELETE form placed OUTSIDE the edit form to prevent nesting -->
+        <div class="mt-3">
+            <form method="POST" style="display:inline;"
+                  onsubmit="return confirm('Permanently delete this event and all its registrations?')">
+                <input type="hidden" name="action" value="delete">
+                <button type="submit" class="btn btn-sm"
+                        style="background:#fde8e8;color:#c0392b;border:1.5px solid #f5c6c6;border-radius:var(--radius-pill);">
+                    <i class="bi bi-trash me-1"></i>Delete Event
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 

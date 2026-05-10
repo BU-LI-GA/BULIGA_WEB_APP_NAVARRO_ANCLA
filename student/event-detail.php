@@ -1,7 +1,7 @@
 <?php
 // ============================================================
 // student/event-detail.php – Event Detail & Register/Unregister
-// Demonstrates: INNER JOIN, CRUD operations (INSERT/DELETE)
+// Demonstrates: INNER JOIN, CRUD (Create registration)
 // ============================================================
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../config/db.php';
@@ -13,13 +13,8 @@ $eid    = (int)($_GET['id'] ?? 0);
 
 if (!$eid) { header('Location: /student/events.php'); exit; }
 
-// ============================================================
-// QUERY: Event Details with Organizer Info
-// JOIN TYPE: INNER JOIN (events × users)
-// PURPOSE:  Fetch event data including organizer contact info.
-//           INNER JOIN ensures event exists AND has valid organizer.
-// SUBQUERY: Count of filled slots (excluding rejected registrations)
-// ============================================================
+// ── INNER JOIN: Event + organizer details ──────────────────
+// Only fetches if event exists (required join).
 $evStmt = $db->prepare("
     SELECT
         e.*,
@@ -28,7 +23,7 @@ $evStmt = $db->prepare("
         (SELECT COUNT(*) FROM registrations r2
          WHERE r2.event_id = e.id AND r2.status != 'rejected') AS slots_taken
     FROM events e
-    INNER JOIN users u ON e.organizer_id = u.id           -- Must have organizer
+    INNER JOIN users u ON e.organizer_id = u.id
     WHERE e.id = ?
 ");
 $evStmt->execute([$eid]);
@@ -41,9 +36,7 @@ $regStmt = $db->prepare("SELECT * FROM registrations WHERE student_id = ? AND ev
 $regStmt->execute([$uid, $eid]);
 $myReg = $regStmt->fetch();
 
-// ============================================================
-// Handle POST: Register or Unregister
-// ============================================================
+// Handle POST: Register
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
@@ -53,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($event['slots_taken'] >= $event['slots']) {
             setFlash('error', 'Sorry, all slots are filled for this event.');
         } else {
-            // CRUD: CREATE – Insert new registration
+            // CREATE (INSERT) – CRUD: Create
             $ins = $db->prepare(
                 "INSERT INTO registrations (student_id, event_id) VALUES (?, ?)"
             );
@@ -61,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             setFlash('success', 'You have successfully registered for this event! 🎉');
         }
     } elseif ($action === 'unregister' && $myReg && $myReg['status'] === 'pending') {
-        // CRUD: DELETE – Cancel registration
+        // DELETE – CRUD: Delete
         $del = $db->prepare("DELETE FROM registrations WHERE student_id = ? AND event_id = ?");
         $del->execute([$uid, $eid]);
         setFlash('success', 'Your registration has been cancelled.');
@@ -71,11 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// ============================================================
-// QUERY: Announcements for this event
-// JOIN TYPE: INNER JOIN (announcements × events × users)
-// PURPOSE:  Show announcements only for THIS event, with author name.
-// ============================================================
+// ── Announcements for this event ───────────────────────────
 $annStmt = $db->prepare("
     SELECT a.*, u.full_name AS author
     FROM announcements a

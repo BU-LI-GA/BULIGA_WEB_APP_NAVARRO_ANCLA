@@ -1,5 +1,10 @@
+// ============================================================
+// buliga.js – Buliga Volunteer Platform – Client-side helpers
+// ============================================================
+
 document.addEventListener('DOMContentLoaded', () => {
 
+    // ── Auto-dismiss alerts after 4 s ──────────────────────
     document.querySelectorAll('.alert.alert-dismissible').forEach(el => {
         setTimeout(() => {
             const bsAlert = bootstrap.Alert.getOrCreateInstance(el);
@@ -7,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 4000);
     });
 
+    // ── Confirm before delete ──────────────────────────────
     document.querySelectorAll('[data-confirm]').forEach(el => {
         el.addEventListener('click', e => {
             if (!confirm(el.dataset.confirm || 'Are you sure?')) {
@@ -15,98 +21,54 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-// ── Enhanced Search with Result Counting ─────────────────────
-document.querySelectorAll('[data-search-table]').forEach(input => {
-    const tableId = input.dataset.searchTable;
-    const table = document.querySelector(tableId);
-    if (!table) return;
+    // ── Live table search ─────────────────────────────────
+    // Usage: <input data-search-table="#myTable">
+    document.querySelectorAll('[data-search-table]').forEach(input => {
+        const tableId = input.dataset.searchTable;
+        const table = document.querySelector(tableId);
+        if (!table) return;
 
-    input.addEventListener('input', function() {
-        const query = this.value.toLowerCase().trim();
-        const tbody = table.querySelector('tbody');
-        let resultCount = 0;
+        input.addEventListener('input', () => {
+            const query = input.value.toLowerCase().trim();
+            table.querySelectorAll('tbody tr').forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
+    });
 
-        tbody.querySelectorAll('tr').forEach(row => {
-            // Remove previous highlights
-            row.querySelectorAll('td').forEach(cell => {
-                cell.innerHTML = cell.innerHTML.replace(/<mark class="search-highlight">([^<]+)<\/mark>/g, '$1');
+    // ── Column sort for tables ────────────────────────────
+    // Usage: <th data-sortable>
+    document.querySelectorAll('th[data-sortable]').forEach(th => {
+        th.style.cursor = 'pointer';
+        th.title = 'Click to sort';
+        let asc = true;
+
+        th.addEventListener('click', () => {
+            const table = th.closest('table');
+            const tbody = table.querySelector('tbody');
+            const idx = [...th.parentElement.children].indexOf(th);
+            const rows = [...tbody.querySelectorAll('tr')];
+
+            rows.sort((a, b) => {
+                const va = a.children[idx]?.innerText.trim() ?? '';
+                const vb = b.children[idx]?.innerText.trim() ?? '';
+                return asc
+                    ? va.localeCompare(vb, undefined, { numeric: true })
+                    : vb.localeCompare(va, undefined, { numeric: true });
             });
 
-            if (!query) {
-                row.style.display = '';
-                row.classList.remove('highlight');
-                return;
-            }
+            rows.forEach(r => tbody.appendChild(r));
+            asc = !asc;
 
-            const text = row.innerText.toLowerCase();
-            const match = text.includes(query);
-            row.style.display = match ? '' : 'none';
-            
-            if (match) {
-                resultCount++;
-                row.classList.add('highlight');
-                
-                // Highlight matching text in cells
-                if (query.length > 1) {  // Only highlight if query is not trivial
-                    row.querySelectorAll('td').forEach(cell => {
-                        const original = cell.innerText;
-                        if (original.toLowerCase().includes(query)) {
-                            const regex = new RegExp(`(${query})`, 'gi');
-                            cell.innerHTML = original.replace(regex, '<mark class="search-highlight">$1</mark>');
-                        }
-                    });
-                }
-            } else {
-                row.classList.remove('highlight');
-            }
+            // Update sort icon
+            table.querySelectorAll('th[data-sortable]').forEach(t => t.dataset.sortDir = '');
+            th.dataset.sortDir = asc ? 'desc' : 'asc';
         });
-
-        // Update result counter
-        const counter = table.parentElement.querySelector('.search-counter');
-        if (counter) {
-            counter.textContent = resultCount ? `${resultCount} result${resultCount !== 1 ? 's' : ''}` : 'No matches';
-        }
     });
-});
 
-// ── Sortable Tables with Visual Indicators ───────────────────
-document.querySelectorAll('th[data-sortable]').forEach(th => {
-    th.style.cursor = 'pointer';
-    th.title = 'Click to sort';
-    let asc = true;
-
-    th.addEventListener('click', () => {
-        const table = th.closest('table');
-        const tbody = table.querySelector('tbody');
-        const idx = [...th.parentElement.children].indexOf(th);
-        const rows = [...tbody.querySelectorAll('tr')];
-
-        rows.sort((a, b) => {
-            const va = a.children[idx]?.innerText.trim() ?? '';
-            const vb = b.children[idx]?.innerText.trim() ?? '';
-            return asc
-                ? va.localeCompare(vb, undefined, { numeric: true, sensitivity: 'base' })
-                : vb.localeCompare(va, undefined, { numeric: true, sensitivity: 'base' });
-        });
-
-        rows.forEach(r => tbody.appendChild(r));
-        
-        // Toggle direction
-        asc = !asc;
-        
-        // Update sort indicators (remove all first)
-        table.querySelectorAll('th[data-sortable]').forEach(t => {
-            t.classList.remove('sort-asc', 'sort-desc');
-            delete t.dataset.sortDir;
-        });
-        
-        // Add current indicator
-        th.classList.add(asc ? 'sort-asc' : 'sort-desc');
-        th.dataset.sortDir = asc ? 'asc' : 'desc';
-    });
-});
-
-     const imgInput = document.getElementById('event_image');
+    // ── Image preview before upload ───────────────────────
+    const imgInput = document.getElementById('event_image');
     const imgPreview = document.getElementById('image_preview');
     if (imgInput && imgPreview) {
         imgInput.addEventListener('change', () => {
@@ -123,6 +85,8 @@ document.querySelectorAll('th[data-sortable]').forEach(th => {
     }
 
 });
+
+// ── Chart helpers (called from inline scripts in dashboard) ──
 
 /**
  * Create a doughnut chart.
@@ -190,7 +154,11 @@ function makeBar(canvasId, labels, data, label, color = '#2d9b5a') {
         }
     });
 }
-   function makeLine(canvasId, labels, data, label, color = '#2d9b5a') {
+
+/**
+ * Create a line chart.
+ */
+function makeLine(canvasId, labels, data, label, color = '#2d9b5a') {
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
     new Chart(ctx, {
@@ -217,4 +185,4 @@ function makeBar(canvasId, labels, data, label, color = '#2d9b5a') {
             }
         }
     });
-} 
+}

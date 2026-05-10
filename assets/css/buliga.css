@@ -1,3 +1,10 @@
+/* ============================================================
+   buliga.css – Buliga Volunteer Platform Stylesheet
+   Aesthetic: "Community in Action" — earthy greens, warm amber,
+   organic shapes, Sora typeface, purposeful & welcoming.
+   ============================================================ */
+
+/* ---------- Design Tokens ---------- */
 :root {
     --green-deep:   #1a6b3c;
     --green-mid:    #2d9b5a;
@@ -20,7 +27,7 @@
     --radius-pill:  999px;
 }
 
-
+/* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
 
 body {
@@ -41,7 +48,7 @@ h1, h2, h3, h4, h5, h6,
 a { color: var(--green-mid); text-decoration: none; }
 a:hover { color: var(--green-deep); }
 
-
+/* ---------- Navbar ---------- */
 .buliga-navbar {
     background: linear-gradient(135deg, var(--green-deep) 0%, #1e7d42 100%);
     box-shadow: 0 2px 20px rgba(0,0,0,.15);
@@ -55,6 +62,7 @@ a:hover { color: var(--green-deep); }
     color: #fff !important;
     letter-spacing: -0.5px;
 }
+
 .brand-icon { font-size: 1.3rem; margin-right: 4px; }
 
 .buliga-navbar .nav-link {
@@ -182,6 +190,8 @@ a:hover { color: var(--green-deep); }
     justify-content: center;
     font-size: 3rem;
 }
+
+/* ---------- Stat Cards (Dashboard) ---------- */
 .stat-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -226,6 +236,7 @@ a:hover { color: var(--green-deep); }
     opacity: 0.1;
     color: var(--green-deep);
 }
+
 /* ---------- Page Hero ---------- */
 .page-hero {
     background: linear-gradient(135deg, var(--green-deep) 0%, #1e7d42 60%, #2d9b5a 100%);
@@ -329,48 +340,6 @@ a:hover { color: var(--green-deep); }
 .buliga-table tbody tr:hover { background: var(--green-pale); }
 .buliga-table tbody td { padding: 0.85rem 1rem; vertical-align: middle; }
 
-/* Sort indicators for sortable table headers */
-.buliga-table th[data-sortable].sort-asc::after {
-    content: ' ▲';
-    font-size: 0.7rem;
-    color: var(--green-mid);
-    margin-left: 6px;
-}
-
-.buliga-table th[data-sortable].sort-desc::after {
-    content: ' ▼';
-    font-size: 0.7rem;
-    color: var(--green-mid);
-    margin-left: 6px;
-}
-
-.buliga-table th[data-sortable].sort-asc,
-.buliga-table th[data-sortable].sort-desc {
-    background: var(--green-pale) !important;
-}
-
-/* Filter badge styles */
-.badge.bg-success { background: var(--green-mid) !important; color: #fff !important; }
-.badge.bg-primary { background: #2c5cf7 !important; color: #fff !important; }
-.badge.bg-warning { background: var(--amber) !important; color: var(--soil) !important; }
-.badge.bg-info    { background: #17a2b8 !important; color: #fff !important; }
-
-/* Search highlight */
-.search-highlight {
-    background: #fff3cd;
-    padding: 0 2px;
-    border-radius: 2px;
-    border: 1px solid var(--amber);
-}
-
-/* Result counter */
-.search-counter {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    text-align: right;
-    margin-top: 0.5rem;
-}
-
 /* ---------- Alert ---------- */
 .buliga-alert {
     border-radius: var(--radius);
@@ -404,121 +373,11 @@ a:hover { color: var(--green-deep); }
     color: #fff;
 }
 
-/* Enhanced background patterns for landing hero */
-.landing-hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: 
-        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-
-/* Enhanced floating background blobs for hero */
-.landing-hero::after {
-    content: '';
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 50%);
-    top: -150px;
-    right: -100px;
-    border-radius: 50%;
-    animation: heroFloatA 16s ease-in-out infinite;
-    z-index: 0;
-}
-
-.landing-hero .hero-float-wrap {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index 0;
-}
-
-/* Enhanced floating elements with more variety */
-.landing-hero .hero-float-wrap span {
-    position: absolute;
-    font-size: 2.2rem;
-    opacity: 0.06;
-    animation: heroFloatDot 10s ease-in-out infinite;
-    animation-delay: calc(var(--i, 0) * 1.5s);
-}
-
-/* Additional floating layer */
-.landing-hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: 
-        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(255,255,255,0.06) 0%, transparent 50%);
-    pointer-events: none;
-}
-
-/* Enhanced keyframes */
-@keyframes heroFloatA {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    25% { transform: translate(-50px, 40px) scale(1.2); }
-    50% { transform: translate(30px, -30px) scale(0.85); }
-    75% { transform: translate(-10px, 20px) scale(1.1); }
-}
-
-@keyframes heroFloatDot {
-    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.04; }
-    20% { transform: translateY(-25px) rotate(10deg); opacity: 0.08; }
-    40% { transform: translateY(-40px) rotate(-5deg); opacity: 0.06; }
-    60% { transform: translateY(-30px) rotate(15deg); opacity: 0.1; }
-    80% { transform: translateY(-15px) rotate(-10deg); opacity: 0.07; }
-}
-
 .landing-hero::before {
     content: '';
     position: absolute;
     inset: 0;
     background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-
-/* Animated floating background blobs for hero */
-.landing-hero::after {
-    content: '';
-    position: absolute;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
-    top: -100px;
-    right: -80px;
-    border-radius: 50%;
-    animation: heroFloatA 12s ease-in-out infinite;
-}
-
-.landing-hero .hero-float-wrap {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 0;
-}
-
-.landing-hero .hero-float-wrap span {
-    position: absolute;
-    font-size: 2rem;
-    opacity: 0.08;
-    animation: heroFloatDot 8s ease-in-out infinite;
-    animation-delay: calc(var(--i, 0) * 1.2s);
-}
-
-@keyframes heroFloatA {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(-40px, 30px) scale(1.15); }
-    66% { transform: translate(20px, -20px) scale(0.9); }
-}
-
-@keyframes heroFloatDot {
-    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.06; }
-    25% { transform: translateY(-30px) rotate(10deg); opacity: 0.12; }
-    50% { transform: translateY(-50px) rotate(0deg); opacity: 0.08; }
-    75% { transform: translateY(-25px) rotate(-10deg); opacity: 0.14; }
 }
 
 .landing-hero .display-3 {
@@ -549,113 +408,11 @@ a:hover { color: var(--green-deep); }
 /* ---------- Auth Pages ---------- */
 .auth-wrapper {
     min-height: 100vh;
-    background: 
-        linear-gradient(135deg, 
-            #0f4c3a 0%, 
-            #1a6b3c 15%, 
-            #2d9b5a 35%, 
-            #5bbf85 50%, 
-            #a8d5ba 65%, 
-            #d4eddf 80%, 
-            #e8f7ef 95%, 
-            #f0fdf4 100%);
+    background: linear-gradient(160deg, var(--green-deep) 0%, #1e7d42 50%, var(--green-mid) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2rem 1rem;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Animated gradient overlay */
-.auth-wrapper::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: 
-        linear-gradient(90deg, 
-            transparent 0%, 
-            rgba(255,255,255,0.1) 25%, 
-            transparent 50%, 
-            rgba(255,255,255,0.1) 75%, 
-            transparent 100%);
-    background-size: 200% 100%;
-    animation: gradientShift 4s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.7;
-}
-
-/* Subtle floating elements */
-.auth-wrapper::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: 
-        radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 25%),
-        radial-gradient(circle at 75% 75%, rgba(255,255,255,0.08) 0%, transparent 25%),
-        radial-gradient(circle at 40% 60%, rgba(255,255,255,0.06) 0%, transparent 25%);
-    pointer-events: none;
-    z-index: 0;
-    animation: floatBG 12s ease-in-out infinite;
-}
-
-/* Enhanced floating dots with better visibility */
-.auth-dots {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    display: block !important;
-}
-
-.auth-dots span {
-    position: absolute;
-    display: block;
-    font-size: 2rem;
-    opacity: 0.15;
-    animation: floatDot 16s ease-in-out infinite;
-}
-
-.auth-dots span:nth-child(1) { --i: 0; top: 5%; left: 10%; animation-delay: 0s; }
-.auth-dots span:nth-child(2) { --i: 1; top: 15%; left: 80%; animation-delay: 1.5s; }
-.auth-dots span:nth-child(3) { --i: 2; top: 30%; left: 5%; animation-delay: 3s; }
-.auth-dots span:nth-child(4) { --i: 3; top: 40%; left: 75%; animation-delay: 4.5s; }
-.auth-dots span:nth-child(5) { --i: 4; top: 55%; left: 15%; animation-delay: 6s; }
-.auth-dots span:nth-child(6) { --i: 5; top: 70%; left: 85%; animation-delay: 7.5s; }
-.auth-dots span:nth-child(7) { --i: 6; top: 20%; left: 40%; animation-delay: 9s; }
-.auth-dots span:nth-child(8) { --i: 7; top: 60%; left: 20%; animation-delay: 10.5s; }
-.auth-dots span:nth-child(9) { --i: 8; top: 75%; left: 40%; animation-delay: 12s; }
-.auth-dots span:nth-child(10) { --i: 9; top: 10%; left: 60%; animation-delay: 13.5s; }
-
-@keyframes gradientShift {
-    0%, 100% { background-position: 0% 0%; }
-    50% { background-position: 100% 0%; }
-}
-
-@keyframes floatBG {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(10px, -10px) scale(1.02); }
-    66% { transform: translate(-5px, 15px) scale(0.98); }
-}
-
-@keyframes floatDot {
-    0%, 100% { 
-        transform: translate(0, 0) scale(1) rotate(0deg);
-        opacity: 0.1;
-    }
-    25% { 
-        transform: translate(-15px, -20px) scale(1.1) rotate(5deg);
-        opacity: 0.2;
-    }
-    50% { 
-        transform: translate(10px, -10px) scale(0.9) rotate(-5deg);
-        opacity: 0.15;
-    }
-    75% { 
-        transform: translate(-5px, 15px) scale(1.05) rotate(3deg);
-        opacity: 0.18;
-    }
 }
 
 .auth-card {
@@ -665,120 +422,6 @@ a:hover { color: var(--green-deep); }
     width: 100%;
     max-width: 440px;
     box-shadow: 0 24px 60px rgba(0,0,0,.25);
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.18);
-    backdrop-filter: blur(10px);
-}
-
-/* Enhanced background for auth card with subtle animations */
-.auth-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: 
-        linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 100%),
-        radial-gradient(circle at 20% 30%, rgba(45,155,90,0.15) 0%, transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(245,166,35,0.1) 0%, transparent 40%);
-    pointer-events: none;
-    z-index: 0;
-    animation: cardGradientShift 10s ease-in-out infinite;
-    opacity: 0.7;
-}
-
-/* Floating subtle elements inside auth card */
-.auth-card::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: 
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 30%),
-        radial-gradient(circle at 70% 70%, rgba(255,255,255,0.1) 0%, transparent 30%);
-    pointer-events: none;
-    z-index: 0;
-    animation: cardFloat 15s ease-in-out infinite;
-    opacity: 0.6;
-}
-
-/* Subtle floating icons in background */
-.auth-card .auth-bg-icons {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.08;
-}
-
-.auth-card .auth-bg-icons span {
-    position: absolute;
-    font-size: 3.5rem;
-    opacity: 0.04;
-    animation: floatIcon 18s ease-in-out infinite;
-}
-
-.auth-card .auth-bg-icons span:nth-child(1) {
-    --i: 0;
-    top: 10%;
-    left: 5%;
-    animation-delay: 0s;
-}
-
-.auth-card .auth-bg-icons span:nth-child(2) {
-    --i: 1;
-    top: 20%;
-    left: 85%;
-    animation-delay: 2s;
-}
-
-.auth-card .auth-bg-icons span:nth-child(3) {
-    --i: 2;
-    top: 50%;
-    left: 10%;
-    animation-delay: 4s;
-}
-
-.auth-card .auth-bg-icons span:nth-child(4) {
-    --i: 3;
-    top: 70%;
-    left: 80%;
-    animation-delay: 6s;
-}
-
-.auth-card .auth-bg-icons span:nth-child(5) {
-    --i: 4;
-    top: 30%;
-    left: 50%;
-    animation-delay: 8s;
-}
-
-@keyframes cardGradientShift {
-    0%, 100% { 
-        background-position: 0% 0%;
-    }
-    50% { 
-        background-position: 100% 100%;
-    }
-}
-
-@keyframes cardFloat {
-    0%, 100% { 
-        transform: translate(0, 0) scale(1);
-    }
-    50% { 
-        transform: translate(15px, -15px) scale(1.03);
-    }
-}
-
-@keyframes floatIcon {
-    0%, 100% { 
-        transform: translateY(0) rotate(0deg);
-        opacity: 0.03;
-    }
-    50% { 
-        transform: translateY(-25px) rotate(12deg);
-        opacity: 0.06;
-    }
 }
 
 .auth-logo {
@@ -872,14 +515,4 @@ a:hover { color: var(--green-deep); }
     .page-hero h1 { font-size: 1.5rem; }
     .buliga-form-card { padding: 1.5rem; }
     .auth-card { padding: 1.75rem; }
-}
-
-/* ---------- Chrome Autofill Fix ---------- */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px #fdfdfd inset !important;
-    -webkit-text-fill-color: var(--text-dark) !important;
-    transition: background-color 5000s ease-in-out 0s;
 }

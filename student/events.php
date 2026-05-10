@@ -1,7 +1,7 @@
 <?php
 // ============================================================
 // student/events.php – Browse & Search Events
-// Demonstrates: LEFT JOIN, INNER JOIN, subquery aggregation
+// Demonstrates: LEFT JOIN, search, filtering
 // ============================================================
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../config/db.php';
@@ -13,9 +13,12 @@ $uid = currentUserId();
 $search = trim($_GET['search'] ?? '');
 $filter = $_GET['status'] ?? 'all';
 
-// ── Build dynamic WHERE clause ───────────────────────────────
+// ── LEFT JOIN: All events + student registration status ─────
+// RIGHT JOIN note: MySQL supports RIGHT JOIN — we'd use it if
+// we wanted all registrations even without events (rare). Here
+// LEFT JOIN shows all events whether registered or not.
 $params = [$uid];
-$where  = ['1=1'];  // always true, allows implode with AND
+$where  = ['1=1'];
 
 if ($search) {
     $where[]  = "(e.title LIKE ? OR e.location LIKE ? OR u.full_name LIKE ?)";
@@ -23,18 +26,10 @@ if ($search) {
     $params[] = "%$search%";
     $params[] = "%$search%";
 }
+
 if ($filter === 'open')       $where[] = "e.status = 'open'";
 if ($filter === 'registered') $where[] = "r.id IS NOT NULL";
 
-// ============================================================
-// QUERY: Events with My Registration Status
-// JOIN TYPE: 
-//   1. LEFT JOIN (events ← registrations) — preserves all events
-//   2. INNER JOIN (events → users)       — requires valid organizer
-// PURPOSE:  List all events, showing whether THIS student has
-//           registered. NULL in reg_status indicates not registered.
-// SUBQUERY: Count of filled slots (excluding rejected registrations)
-// ============================================================
 $sql = "
     SELECT
         e.id,
@@ -50,13 +45,13 @@ $sql = "
         u.full_name       AS organizer_name,
         r.id              AS reg_id,
         r.status          AS reg_status,
-        -- Subquery: Count filled slots per event
+        -- COUNT slots taken via subquery
         (SELECT COUNT(*) FROM registrations sr
          WHERE sr.event_id = e.id AND sr.status != 'rejected') AS slots_taken
     FROM events e
-    LEFT JOIN registrations r                          -- LEFT JOIN: keep ALL events
-        ON r.event_id = e.id AND r.student_id = ?      -- my registration only
-    INNER JOIN users u ON e.organizer_id = u.id        -- INNER JOIN: must have organizer
+    LEFT JOIN registrations r                  -- LEFT JOIN keeps all events
+        ON r.event_id = e.id AND r.student_id = ?
+    INNER JOIN users u ON e.organizer_id = u.id
     WHERE " . implode(' AND ', $where) . "
     ORDER BY e.event_date ASC
 ";
@@ -68,6 +63,7 @@ $events = $stmt->fetchAll();
 $pageTitle = 'Browse Events';
 require_once __DIR__ . '/../includes/header.php';
 ?>
+
 <div class="page-hero">
     <div class="container">
         <h1><i class="bi bi-calendar-event me-2"></i>Volunteer Opportunities</h1>

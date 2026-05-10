@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // includes/header.php – Top navigation bar (included on every page)
 // Expects $pageTitle to be set before including this file.
 if (!isset($pageTitle)) $pageTitle = 'Buliga';

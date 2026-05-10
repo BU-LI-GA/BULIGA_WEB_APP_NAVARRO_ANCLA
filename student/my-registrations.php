@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 // ============================================================
-// student/my-registrations.php – All My Registrations
-// Demonstrates: INNER JOIN × 2, sorting, search, full data table
+// student/my-registrations.php – All Registrations (with sort)
+// Demonstrates: INNER JOIN, sort, full data table
 // ============================================================
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../config/db.php';
@@ -10,13 +10,9 @@ requireRole('student');
 $db  = getDB();
 $uid = currentUserId();
 
-// ============================================================
-// QUERY: My Registrations with Full Event + Organizer Details
-// JOIN TYPE: INNER JOIN × 2
-// PURPOSE:  Show all registrations for THIS student, along with
-//           complete event info and organizer contact details.
-//           INNER JOIN guarantees all referenced records exist.
-// ============================================================
+// ── INNER JOIN: Registrations × Events × Users ─────────────
+// INNER JOIN ensures we only get registrations for existing events
+// with existing organizers (no orphaned rows).
 $stmt = $db->prepare("
     SELECT
         r.id           AS reg_id,
@@ -32,9 +28,9 @@ $stmt = $db->prepare("
         e.status       AS event_status,
         u.full_name    AS organizer_name
     FROM registrations r
-    INNER JOIN events e ON r.event_id = e.id           -- Must have valid event
-    INNER JOIN users u  ON e.organizer_id = u.id       -- Must have valid organizer
-    WHERE r.student_id = ?                             -- Only MY registrations
+    INNER JOIN events e ON r.event_id = e.id       -- INNER JOIN: event data
+    INNER JOIN users u  ON e.organizer_id = u.id   -- INNER JOIN: organizer data
+    WHERE r.student_id = ?
     ORDER BY e.event_date DESC
 ");
 $stmt->execute([$uid]);
@@ -46,6 +42,7 @@ $total_hours = array_sum(array_column($regs, 'hours_rendered'));
 $pageTitle = 'My Registrations';
 require_once __DIR__ . '/../includes/header.php';
 ?>
+
 <div class="page-hero">
     <div class="container">
         <h1><i class="bi bi-bookmark-check me-2"></i>My Registrations</h1>

@@ -1,7 +1,8 @@
 <?php
 // ============================================================
 // organizer/dashboard.php – Organizer Dashboard
-// Demonstrates: INNER JOIN, LEFT JOIN, RIGHT JOIN with Chart.js
+// Demonstrates: INNER JOIN, LEFT JOIN, RIGHT JOIN, aggregation,
+//               Chart.js bar + doughnut + line charts
 // ============================================================
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../config/db.php';
@@ -10,13 +11,8 @@ requireRole('organizer');
 $db  = getDB();
 $uid = currentUserId();
 
-// ============================================================
-// QUERY 1: My Events Overview
-// JOIN TYPE: LEFT JOIN (events ← registrations)
-// PURPOSE:  Retrieve ALL events created by this organizer, including
-//           those with ZERO registrations. LEFT JOIN ensures events
-//           appear even when COUNT(r.id) = 0.
-// ============================================================
+// ── INNER JOIN: Organizer's events with registration counts ──
+// Only events created by this organizer (intersection of events + users).
 $evStmt = $db->prepare("
     SELECT
         e.id,
@@ -24,53 +20,46 @@ $evStmt = $db->prepare("
         e.event_date,
         e.status,
         e.slots,
-        COUNT(r.id) AS total_regs,
+        COUNT(r.id)                                        AS total_regs,
         SUM(CASE WHEN r.status = 'approved'  THEN 1 ELSE 0 END) AS approved,
         SUM(CASE WHEN r.status = 'pending'   THEN 1 ELSE 0 END) AS pending,
         SUM(CASE WHEN r.status = 'completed' THEN 1 ELSE 0 END) AS completed
     FROM events e
-    LEFT JOIN registrations r ON r.event_id = e.id       -- LEFT JOIN: keep ALL events
-    WHERE e.organizer_id = ?                              -- Filter to THIS organizer
+    LEFT JOIN registrations r ON r.event_id = e.id        -- LEFT JOIN: include events with 0 registrations
+    WHERE e.organizer_id = ?
     GROUP BY e.id
     ORDER BY e.event_date DESC
 ");
 $evStmt->execute([$uid]);
 $myEvents = $evStmt->fetchAll();
 
-// Summary statistics from Query 1 results
+// ── Summary Stats ──────────────────────────────────────────
 $totalEvents   = count($myEvents);
 $totalVols     = array_sum(array_column($myEvents, 'total_regs'));
 $totalApproved = array_sum(array_column($myEvents, 'approved'));
 $openEvents    = count(array_filter($myEvents, fn($e) => $e['status'] === 'open'));
 
-// ============================================================
-// QUERY 2: Recent Volunteer Activity
-// JOIN TYPE: RIGHT JOIN (registrations → users)
-// PURPOSE:  Show ALL student users, even those who have NEVER
-//           registered for any of my events. Demonstrates RIGHT JOIN
-//           vs INNER JOIN — unregistered students appear with NULL
-//           in event_title, reg_status, etc.
-// ============================================================
+// ── RIGHT JOIN demo: All registrations → Students ──────────
+// RIGHT JOIN: show all registrations even if a student record
+// were somehow missing (defensive; also demonstrates RIGHT JOIN).
 $volStmt = $db->prepare("
     SELECT
-        u.id            AS student_id,
         u.full_name,
         u.email,
-        e.title         AS event_title,
-        r.status        AS reg_status,
+        e.title        AS event_title,
+        r.status       AS reg_status,
         r.hours_rendered,
         r.registered_at
     FROM events e
-    INNER JOIN registrations r ON r.event_id  = e.id    -- Only real registrations
-    RIGHT JOIN users u          ON r.student_id = u.id  -- RIGHT JOIN: keep ALL students
-    WHERE e.organizer_id = ?                             -- My events only
-      AND u.role = 'student'                             -- Students only
+    INNER JOIN registrations r  ON r.event_id  = e.id     -- INNER JOIN: only real events
+    RIGHT JOIN users u          ON r.student_id = u.id     -- RIGHT JOIN: keep all students even if no reg
+    WHERE e.organizer_id = ?
+      AND u.role = 'student'
     ORDER BY r.registered_at DESC
     LIMIT 8
 ");
 $volStmt->execute([$uid]);
 $recentVols = $volStmt->fetchAll();
-// Note: Students with no registrations show NULL for event_title, reg_status, etc.
 
 // ── Chart 1: Registrations per event (bar) ─────────────────
 $barLabels = array_map(fn($e) => substr($e['title'], 0, 20), $myEvents);
@@ -81,32 +70,27 @@ $statusOpen      = count(array_filter($myEvents, fn($e) => $e['status'] === 'ope
 $statusClosed    = count(array_filter($myEvents, fn($e) => $e['status'] === 'closed'));
 $statusCancelled = count(array_filter($myEvents, fn($e) => $e['status'] === 'cancelled'));
 
-// ============================================================
-// QUERY 3: Monthly Registration Trend (Chart Data)
-// JOIN TYPE: INNER JOIN (registrations × events)
-// PURPOSE:  Count registrations per month for THIS organizer's
-//           events only. INNER JOIN excludes registrations that
-//           don't have a matching event (shouldn't happen due to FK).
-// ============================================================
+// ── Chart 3: Monthly registrations (line) ──────────────────
 $monthlyStmt = $db->prepare("
     SELECT
-        DATE_FORMAT(r.registered_at, '%b %Y') AS month_label,
-        COUNT(r.id) AS reg_count
+        DATE_FORMAT(r.registered_at, '%b %Y') AS month,
+        COUNT(r.id)                            AS reg_count
     FROM registrations r
-    INNER JOIN events e ON r.event_id = e.id           -- Must be my event
+    INNER JOIN events e ON r.event_id = e.id
     WHERE e.organizer_id = ?
     GROUP BY YEAR(r.registered_at), MONTH(r.registered_at)
-    ORDER BY YEAR(r.registered_at) DESC, MONTH(r.registered_at) DESC
+    ORDER BY YEAR(r.registered_at), MONTH(r.registered_at)
     LIMIT 6
 ");
 $monthlyStmt->execute([$uid]);
 $monthly = $monthlyStmt->fetchAll();
-$lineLabels = array_column($monthly, 'month_label');
+$lineLabels = array_column($monthly, 'month');
 $lineData   = array_column($monthly, 'reg_count');
 
 $pageTitle = 'Organizer Dashboard';
 require_once __DIR__ . '/../includes/header.php';
 ?>
+
 <div class="page-hero">
     <div class="container">
         <h1><i class="bi bi-grid-1x2 me-2"></i>Organizer Dashboard</h1>
@@ -220,7 +204,9 @@ require_once __DIR__ . '/../includes/header.php';
             <?php endif; ?>
         </div>
     </div>
-<div class="section-header">
+
+    <!-- Events Summary Table -->
+    <div class="section-header">
         <h5><i class="bi bi-table me-2 text-green"></i>My Events Overview</h5>
         <a href="/organizer/create-event.php" class="btn btn-green btn-sm">
             <i class="bi bi-plus me-1"></i>New Event

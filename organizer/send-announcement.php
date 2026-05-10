@@ -1,4 +1,3 @@
-
 <?php
 // ============================================================
 // organizer/send-announcement.php – Send Announcement
@@ -36,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
+
 // ── LEFT JOIN: Prior announcements × author ────────────────
 // LEFT JOIN keeps announcements even if author user were deleted.
 $annStmt = $db->prepare("
@@ -68,13 +68,13 @@ require_once __DIR__ . '/../includes/header.php';
                 <h5 class="fw-sora mb-4"><i class="bi bi-send me-2 text-green"></i>New Announcement</h5>
                 <form method="POST">
                     <div class="mb-3">
-                        <label class="form-label">Title</label>
+                        <label class="form-label">Title <span class="text-danger">*</span></label>
                         <input type="text" name="ann_title" class="form-control"
                                value="<?= htmlspecialchars($_POST['ann_title'] ?? '') ?>"
                                placeholder="e.g. Reminder: Bring Gloves" required />
                     </div>
                     <div class="mb-4">
-                        <label class="form-label">Message</label>
+                        <label class="form-label">Message <span class="text-danger">*</span></label>
                         <textarea name="ann_body" class="form-control" rows="5"
                                   placeholder="Write your announcement here…"
                                   required><?= htmlspecialchars($_POST['ann_body'] ?? '') ?></textarea>

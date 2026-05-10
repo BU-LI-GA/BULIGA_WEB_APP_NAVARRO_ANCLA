@@ -20,70 +20,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $slots       = (int)($_POST['slots'] ?? 20);
     $status      = $_POST['status'] ?? 'open';
 
-    // Validation
     if (!$title || !$description || !$location || !$event_date || !$start_time || !$end_time) {
         setFlash('error', 'Please fill in all required fields.');
     } elseif ($slots < 1 || $slots > 500) {
         setFlash('error', 'Slots must be between 1 and 500.');
-    } elseif (strtotime($event_date) < strtotime('today')) {
-        setFlash('error', 'Event date cannot be in the past.');
-    } elseif ($end_time <= $start_time) {
-        setFlash('error', 'End time must be after start time.');
     } else {
+        // Handle image upload
         $image_url = null;
-        $hasImageError = false;
-
-        // Handle optional image upload with validation
         if (!empty($_FILES['image']['name'])) {
             $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
             $mime    = $_FILES['image']['type'];
-            $size    = $_FILES['image']['size'];
-
-            if (!in_array($mime, $allowed)) {
-                setFlash('error', 'Invalid image format. Allowed: JPG, PNG, GIF, WEBP.');
-                $hasImageError = true;
-            } elseif ($size >= 3_000_000) {
-                setFlash('error', 'Image too large. Maximum 3MB allowed.');
-                $hasImageError = true;
-            } else {
-                $ext      = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-                $filename = uniqid('ev_', true) . '.' . $ext;
-                $dest     = __DIR__ . '/../uploads/' . $filename;
-                
-                if (!move_uploaded_file($_FILES['image']['tmp_name'], $dest)) {
-                    setFlash('error', 'Failed to save image. Check upload directory permissions.');
-                    $hasImageError = true;
-                } else {
+            if (in_array($mime, $allowed) && $_FILES['image']['size'] < 3_000_000) {
+                $ext       = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+                $filename  = uniqid('ev_', true) . '.' . $ext;
+                $dest      = __DIR__ . '/../uploads/' . $filename;
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $dest)) {
                     $image_url = '/uploads/' . $filename;
                 }
+            } else {
+                setFlash('error', 'Image must be JPG/PNG/GIF/WEBP under 3MB.');
             }
         }
 
-        // Only insert if no image errors occurred
-        if (!$hasImageError) {
-            // CRUD: CREATE – Insert new event
-            $ins = $db->prepare("
-                INSERT INTO events
-                    (organizer_id, title, description, location, event_date,
-                     start_time, end_time, slots, image_url, status)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ");
-            $ins->execute([
-                $uid, $title, $description, $location,
-                $event_date, $start_time, $end_time,
-                $slots, $image_url, $status
-            ]);
+        // CRUD: Create – INSERT new event
+        $ins = $db->prepare("
+            INSERT INTO events
+                (organizer_id, title, description, location, event_date,
+                 start_time, end_time, slots, image_url, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+        $ins->execute([
+            $uid, $title, $description, $location,
+            $event_date, $start_time, $end_time,
+            $slots, $image_url, $status
+        ]);
 
-            $newId = $db->lastInsertId();
-            setFlash('success', 'Event "' . $title . '" created successfully! 🎉');
-            header("Location: /organizer/manage-registrations.php?event_id=$newId");
-            exit;
-        }
-        // If $hasImageError is true, error flash is already set — fall through to re-display form
+        $newId = $db->lastInsertId();
+        setFlash('success', 'Event "' . $title . '" created successfully! 🎉');
+        header("Location: /organizer/manage-registrations.php?event_id=$newId");
+        exit;
     }
 }
 
-    $pageTitle = 'Create Event';
+$pageTitle = 'Create Event';
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
@@ -99,21 +78,21 @@ require_once __DIR__ . '/../includes/header.php';
         <form method="POST" enctype="multipart/form-data">
 
             <div class="mb-3">
-                <label class="form-label">Event Title</label>
+                <label class="form-label">Event Title <span class="text-danger">*</span></label>
                 <input type="text" name="title" class="form-control"
                        value="<?= htmlspecialchars($_POST['title'] ?? '') ?>"
                        placeholder="e.g. Coastal Clean-Up Drive" required />
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Description</label>
+                <label class="form-label">Description <span class="text-danger">*</span></label>
                 <textarea name="description" class="form-control" rows="4"
                           placeholder="Describe the event, its goals, and what volunteers will do…"
                           required><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Location</label>
+                <label class="form-label">Location <span class="text-danger">*</span></label>
                 <input type="text" name="location" class="form-control"
                        value="<?= htmlspecialchars($_POST['location'] ?? '') ?>"
                        placeholder="e.g. Macajalar Bay, CDO" required />
@@ -121,18 +100,18 @@ require_once __DIR__ . '/../includes/header.php';
 
             <div class="row g-3 mb-3">
                 <div class="col-sm-4">
-                    <label class="form-label">Event Date</label>
+                    <label class="form-label">Event Date <span class="text-danger">*</span></label>
                     <input type="date" name="event_date" class="form-control"
                            value="<?= htmlspecialchars($_POST['event_date'] ?? '') ?>"
                            min="<?= date('Y-m-d') ?>" required />
                 </div>
                 <div class="col-sm-4">
-                    <label class="form-label">Start Time</label>
+                    <label class="form-label">Start Time <span class="text-danger">*</span></label>
                     <input type="time" name="start_time" class="form-control"
                            value="<?= htmlspecialchars($_POST['start_time'] ?? '') ?>" required />
                 </div>
                 <div class="col-sm-4">
-                    <label class="form-label">End Time</label>
+                    <label class="form-label">End Time <span class="text-danger">*</span></label>
                     <input type="time" name="end_time" class="form-control"
                            value="<?= htmlspecialchars($_POST['end_time'] ?? '') ?>" required />
                 </div>
@@ -140,7 +119,7 @@ require_once __DIR__ . '/../includes/header.php';
 
             <div class="row g-3 mb-3">
                 <div class="col-sm-6">
-                    <label class="form-label">Volunteer Slots</label>
+                    <label class="form-label">Volunteer Slots <span class="text-danger">*</span></label>
                     <input type="number" name="slots" class="form-control" min="1" max="500"
                            value="<?= (int)($_POST['slots'] ?? 20) ?>" required />
                 </div>

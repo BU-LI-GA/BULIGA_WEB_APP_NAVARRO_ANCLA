@@ -1,9 +1,11 @@
 <?php
-
+// ============================================================
+// index.php – Public Landing Page
+// ============================================================
 require_once __DIR__ . '/includes/session.php';
 require_once __DIR__ . '/config/db.php';
 
-
+// If logged in, redirect to dashboard
 if (isLoggedIn()) {
     header('Location: /' . currentRole() . '/dashboard.php');
     exit;
@@ -11,6 +13,7 @@ if (isLoggedIn()) {
 
 $db = getDB();
 
+// Fetch 3 latest open events for preview
 $evStmt = $db->prepare("
     SELECT e.id, e.title, e.description, e.location, e.event_date,
            e.slots, e.image_url, e.status,
@@ -24,6 +27,8 @@ $evStmt = $db->prepare("
 ");
 $evStmt->execute();
 $featuredEvents = $evStmt->fetchAll();
+
+// Stats for hero
 $statsStmt = $db->query("
     SELECT
         (SELECT COUNT(*) FROM events)                                   AS total_events,
@@ -123,10 +128,10 @@ $siteStats = $statsStmt->fetch();
             overflow: hidden;
         }
         .cta-section::before {
-             content:'';
-             position:absolute; right:3%; bottom:-10px;
-             font-size:8rem; opacity:.07; pointer-events:none;
-         }
+            content:'🌿';
+            position:absolute; right:3%; bottom:-10px;
+            font-size:8rem; opacity:.07; pointer-events:none;
+        }
 
         /* Animated underline on hero CTA */
         .hero-cta-wrap { display:flex; gap:1rem; flex-wrap:wrap; }
@@ -142,6 +147,8 @@ $siteStats = $statsStmt->fetch();
     </style>
 </head>
 <body>
+
+<!-- ── Navbar ── -->
 <nav class="navbar navbar-expand-lg buliga-navbar">
     <div class="container">
         <a class="navbar-brand buliga-brand" href="/">
@@ -165,17 +172,9 @@ $siteStats = $statsStmt->fetch();
         </div>
     </div>
 </nav>
+
+<!-- ── Hero ── -->
 <section class="landing-hero">
-     <div class="hero-float-wrap">
-         <span style="--i:0;top:10%;left:8%;"></span>
-         <span style="--i:1;top:20%;left:85%;"></span>
-         <span style="--i:2;top:40%;left:5%;"></span>
-         <span style="--i:3;top:65%;left:90%;"></span>
-         <span style="--i:4;top:75%;left:12%;"></span>
-         <span style="--i:5;top:30%;left:92%;"></span>
-         <span style="--i:6;top:80%;left:45%;"></span>
-         <span style="--i:7;top:15%;left:50%;"></span>
-     </div>
     <div class="container position-relative" style="z-index:2;">
         <div class="row align-items-center">
             <div class="col-lg-7">
@@ -222,6 +221,8 @@ $siteStats = $statsStmt->fetch();
         </div>
     </div>
 </section>
+
+<!-- ── How It Works ── -->
 <section id="how" class="py-5" style="background:var(--green-pale);">
     <div class="container">
         <div class="text-center mb-5">
@@ -254,6 +255,8 @@ $siteStats = $statsStmt->fetch();
         </div>
     </div>
 </section>
+
+<!-- ── Features ── -->
 <section class="py-5">
     <div class="container">
         <div class="text-center mb-5">
@@ -307,6 +310,8 @@ $siteStats = $statsStmt->fetch();
         </div>
     </div>
 </section>
+
+<!-- ── Featured Events ── -->
 <section id="events" class="py-5" style="background:var(--green-pale);">
     <div class="container">
         <div class="d-flex align-items-end justify-content-between mb-4">
@@ -363,6 +368,7 @@ $siteStats = $statsStmt->fetch();
     </div>
 </section>
 
+<!-- ── About ── -->
 <section id="about" class="py-5">
     <div class="container">
         <div class="row align-items-center g-5">
@@ -407,18 +413,43 @@ $siteStats = $statsStmt->fetch();
                     </div>
                     <div class="col-6">
                         <div class="feature-card text-center">
-                             <div style="font-size:2.5rem;margin-bottom:.5rem;">🔐</div>
-                             <div class="fw-sora">Secure</div>
-                             <div class="small text-muted mt-1">Role-based access with bcrypt auth</div>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
- </section>
+                            <div style="font-size:2.5rem;margin-bottom:.5rem;">🔐</div>
+                            <div class="fw-sora">Secure</div>
+                            <div class="small text-muted mt-1">Role-based access with bcrypt auth</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
- <footer class="buliga-footer py-4">
+<!-- ── CTA Banner ── -->
+<section class="py-5">
+    <div class="container">
+        <div class="cta-section">
+            <h2 class="fw-sora mb-3" style="font-size:2.2rem;">
+                Ready to Make a Difference?
+            </h2>
+            <p class="mb-4" style="opacity:.85;max-width:480px;margin:0 auto 1.5rem;">
+                Join hundreds of students already volunteering through Buliga and start
+                building your community impact today.
+            </p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="/auth/register.php" class="btn btn-buliga btn-lg px-4">
+                    <i class="bi bi-person-plus me-2"></i>Create Free Account
+                </a>
+                <a href="/auth/login.php" class="btn btn-lg px-4"
+                   style="background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:var(--radius-pill);">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Log In
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="buliga-footer py-4">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-4 mb-3 mb-md-0">
@@ -442,4 +473,3 @@ $siteStats = $statsStmt->fetch();
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
