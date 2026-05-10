@@ -113,7 +113,7 @@ require_once __DIR__ . '/../includes/header.php';
         <h5 class="fw-sora mb-4"><i class="bi bi-pencil-square me-2 text-green"></i>Edit Profile</h5>
         <form method="POST">
             <div class="mb-3">
-                <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                 <label class="form-label">Full Name</label>
                 <input type="text" name="full_name" class="form-control"
                        value="<?= htmlspecialchars($user['full_name']) ?>" required />
             </div>
