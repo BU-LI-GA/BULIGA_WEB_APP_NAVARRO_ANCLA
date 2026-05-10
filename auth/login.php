@@ -53,20 +53,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <div class="auth-wrapper">
-    <!-- Floating volunteer-themed background elements -->
-    <div class="auth-dots" style="display:none;">
-        <span style="--i:0;top:15%;left:10%;">🤝</span>
-        <span style="--i:1;top:25%;left:80%;">🌿</span>
-        <span style="--i:2;top:60%;left:5%;">👥</span>
-        <span style="--i:3;top:70%;left:75%;">🤲</span>
-        <span style="--i:4;top:40%;left:90%;">🌱</span>
-        <span style="--i:5;top:85%;left:20%;">💚</span>
-        <span style="--i:6;top:10%;left:50%;">🙌</span>
-        <span style="--i:7;top:55%;left:95%;">🏡</span>
-    </div>
-    <div class="auth-card">
-        <div class="auth-logo">Buliga</div>
-        <p class="auth-tagline">Sign in to continue volunteering</p>
+     <!-- Floating volunteer-themed background elements -->
+     <div class="auth-dots" style="display:none;">
+         <span style="--i:0;top:15%;left:10%;"></span>
+         <span style="--i:1;top:25%;left:80%;"></span>
+         <span style="--i:2;top:60%;left:5%;"></span>
+         <span style="--i:3;top:70%;left:75%;"></span>
+         <span style="--i:4;top:40%;left:90%;"></span>
+         <span style="--i:5;top:85%;left:20%;"></span>
+         <span style="--i:6;top:10%;left:50%;"></span>
+         <span style="--i:7;top:55%;left:95%;"></span>
+     </div>
+     <div class="auth-card">
+         <div class="auth-logo">Buliga</div>
+         <p class="auth-tagline">Sign in to continue volunteering</p>
 
         <?php if ($error): ?>
             <div class="alert alert-danger rounded-3 py-2 mb-3 small"><?= htmlspecialchars($error) ?></div>

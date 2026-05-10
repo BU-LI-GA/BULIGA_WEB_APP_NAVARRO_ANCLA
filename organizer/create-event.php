@@ -20,45 +20,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $slots       = (int)($_POST['slots'] ?? 20);
     $status      = $_POST['status'] ?? 'open';
 
+    // Validation
     if (!$title || !$description || !$location || !$event_date || !$start_time || !$end_time) {
         setFlash('error', 'Please fill in all required fields.');
     } elseif ($slots < 1 || $slots > 500) {
         setFlash('error', 'Slots must be between 1 and 500.');
+    } elseif (strtotime($event_date) < strtotime('today')) {
+        setFlash('error', 'Event date cannot be in the past.');
+    } elseif ($end_time <= $start_time) {
+        setFlash('error', 'End time must be after start time.');
     } else {
-        // Handle image upload
         $image_url = null;
+        $hasImageError = false;
+
+        // Handle optional image upload with validation
         if (!empty($_FILES['image']['name'])) {
             $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
             $mime    = $_FILES['image']['type'];
-            if (in_array($mime, $allowed) && $_FILES['image']['size'] < 3_000_000) {
-                $ext       = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-                $filename  = uniqid('ev_', true) . '.' . $ext;
-                $dest      = __DIR__ . '/../uploads/' . $filename;
-                if (move_uploaded_file($_FILES['image']['tmp_name'], $dest)) {
+            $size    = $_FILES['image']['size'];
+
+            if (!in_array($mime, $allowed)) {
+                setFlash('error', 'Invalid image format. Allowed: JPG, PNG, GIF, WEBP.');
+                $hasImageError = true;
+            } elseif ($size >= 3_000_000) {
+                setFlash('error', 'Image too large. Maximum 3MB allowed.');
+                $hasImageError = true;
+            } else {
+                $ext      = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+                $filename = uniqid('ev_', true) . '.' . $ext;
+                $dest     = __DIR__ . '/../uploads/' . $filename;
+                
+                if (!move_uploaded_file($_FILES['image']['tmp_name'], $dest)) {
+                    setFlash('error', 'Failed to save image. Check upload directory permissions.');
+                    $hasImageError = true;
+                } else {
                     $image_url = '/uploads/' . $filename;
                 }
-            } else {
-                setFlash('error', 'Image must be JPG/PNG/GIF/WEBP under 3MB.');
             }
         }
 
-          // CRUD: Create – INSERT new event
-        $ins = $db->prepare("
-            INSERT INTO events
-                (organizer_id, title, description, location, event_date,
-                 start_time, end_time, slots, image_url, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ");
-        $ins->execute([
-            $uid, $title, $description, $location,
-            $event_date, $start_time, $end_time,
-            $slots, $image_url, $status
-        ]);
+        // Only insert if no image errors occurred
+        if (!$hasImageError) {
+            // CRUD: CREATE – Insert new event
+            $ins = $db->prepare("
+                INSERT INTO events
+                    (organizer_id, title, description, location, event_date,
+                     start_time, end_time, slots, image_url, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ");
+            $ins->execute([
+                $uid, $title, $description, $location,
+                $event_date, $start_time, $end_time,
+                $slots, $image_url, $status
+            ]);
 
-        $newId = $db->lastInsertId();
-        setFlash('success', 'Event "' . $title . '" created successfully! 🎉');
-        header("Location: /organizer/manage-registrations.php?event_id=$newId");
-        exit;
+            $newId = $db->lastInsertId();
+            setFlash('success', 'Event "' . $title . '" created successfully! 🎉');
+            header("Location: /organizer/manage-registrations.php?event_id=$newId");
+            exit;
+        }
+        // If $hasImageError is true, error flash is already set — fall through to re-display form
     }
 }
 

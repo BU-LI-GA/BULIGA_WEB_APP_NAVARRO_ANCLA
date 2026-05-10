@@ -6,9 +6,7 @@ requireRole('organizer');
 
 $db  = getDB();
 $uid = currentUserId();
-// ── 1. INNER JOIN ─────────────────────────────────────────
-// Returns ONLY rows that have matching values in BOTH tables.
-// Here: registrations that have both a matching student AND a matching event.
+
 $innerSQL = "
 SELECT
     r.id          AS reg_id,
@@ -22,9 +20,7 @@ ORDER BY r.id
 LIMIT 8";
 $innerResult = $db->query($innerSQL)->fetchAll();
 
-// ── 2. LEFT JOIN ──────────────────────────────────────────
-// Returns ALL rows from the LEFT table (events), plus matching
-// rows from the RIGHT table (registrations). NULLs if no match.
+
 $leftSQL = "
 SELECT
     e.id          AS event_id,
@@ -38,10 +34,7 @@ ORDER BY registration_count DESC
 LIMIT 8";
 $leftResult = $db->query($leftSQL)->fetchAll();
 
-// ── 3. RIGHT JOIN ─────────────────────────────────────────
-// Returns ALL rows from the RIGHT table (users/students), plus
-// matching rows from the LEFT table (registrations). NULLs if
-// the student has no registrations at all.
+
 $rightSQL = "
 SELECT
     u.full_name   AS student_name,
@@ -56,9 +49,7 @@ ORDER BY total_registrations DESC
 LIMIT 8";
 $rightResult = $db->query($rightSQL)->fetchAll();
 
-// ── 4. FULL OUTER JOIN (simulated with UNION) ─────────────
-// MySQL has no native FULL OUTER JOIN, so we simulate with
-// LEFT JOIN UNION RIGHT JOIN to get all rows from both tables.
+
 $fullSQL = "
 -- Full Outer Join: All events + all students (matched where possible)
 SELECT

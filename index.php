@@ -407,62 +407,18 @@ $siteStats = $statsStmt->fetch();
                     </div>
                     <div class="col-6">
                         <div class="feature-card text-center">
-                            <div style="font-size:2.5rem;margin-bottom:.5rem;">🔐</div>
-                            <div class="fw-sora">Secure</div>
-                            <div class="small text-muted mt-1">Role-based access with bcrypt auth</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+                             <div style="font-size:2.5rem;margin-bottom:.5rem;">🔐</div>
+                             <div class="fw-sora">Secure</div>
+                             <div class="small text-muted mt-1">Role-based access with bcrypt auth</div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </section>
 
-<section class="py-5">
-    <div class="container">
-        <div class="cta-section">
-            <h2 class="fw-sora mb-3" style="font-size:2.2rem;">
-                Ready to Make a Difference?
-            </h2>
-            <p class="mb-4" style="opacity:.85;max-width:480px;margin:0 auto 1.5rem;">
-                Join hundreds of students already volunteering through Buliga and start
-                building your community impact today.
-            </p>
-            <div class="d-flex gap-3 justify-content-center flex-wrap">
-                <a href="/auth/register.php" class="btn btn-buliga btn-lg px-4">
-                    <i class="bi bi-person-plus me-2"></i>Create Free Account
-                </a>
-                <a href="/auth/login.php" class="btn btn-lg px-4"
-                   style="background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:var(--radius-pill);">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>Log In
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="py-5">
-    <div class="container">
-        <div class="cta-section">
-            <h2 class="fw-sora mb-3" style="font-size:2.2rem;">
-                Ready to Make a Difference?
-            </h2>
-            <p class="mb-4" style="opacity:.85;max-width:480px;margin:0 auto 1.5rem;">
-                Join hundreds of students already volunteering through Buliga and start
-                building your community impact today.
-            </p>
-            <div class="d-flex gap-3 justify-content-center flex-wrap">
-                <a href="/auth/register.php" class="btn btn-buliga btn-lg px-4">
-                    <i class="bi bi-person-plus me-2"></i>Create Free Account
-                </a>
-                <a href="/auth/login.php" class="btn btn-lg px-4"
-                   style="background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:var(--radius-pill);">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>Log In
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-<footer class="buliga-footer py-4">
+ <footer class="buliga-footer py-4">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-4 mb-3 mb-md-0">

@@ -1,5 +1,8 @@
 <?php
-
+// ============================================================
+// organizer/events.php – Organizer's Events List
+// Demonstrates: LEFT JOIN with GROUP BY aggregation, filtering
+// ============================================================
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../config/db.php';
 requireRole('organizer');
@@ -22,16 +25,23 @@ if (in_array($status, ['open','closed','cancelled'])) {
     $params[] = $status;
 }
 
-// ── LEFT JOIN: Events with registration count ──────────────
+// ============================================================
+// QUERY: Events with Registration Summary
+// JOIN TYPE: LEFT JOIN (events ← registrations)
+// PURPOSE:  Show all organizer's events, INCLUDING those with
+//           zero registrations. LEFT JOIN + COUNT() gives us
+//           the volunteer count per event (0 if none).
+// AGGREGATION: GROUP BY e.id allows COUNT and SUM on registrations
+// ============================================================
 $stmt = $db->prepare("
     SELECT
         e.*,
-        COUNT(r.id)                                              AS total_regs,
-        SUM(CASE WHEN r.status='approved'  THEN 1 ELSE 0 END)   AS approved,
-        SUM(CASE WHEN r.status='pending'   THEN 1 ELSE 0 END)   AS pending,
-        SUM(CASE WHEN r.status='completed' THEN 1 ELSE 0 END)   AS completed
+        COUNT(r.id) AS total_regs,
+        SUM(CASE WHEN r.status='approved'  THEN 1 ELSE 0 END) AS approved,
+        SUM(CASE WHEN r.status='pending'   THEN 1 ELSE 0 END) AS pending,
+        SUM(CASE WHEN r.status='completed' THEN 1 ELSE 0 END) AS completed
     FROM events e
-    LEFT JOIN registrations r ON r.event_id = e.id              -- LEFT JOIN: 0-reg events included
+    LEFT JOIN registrations r ON r.event_id = e.id     -- LEFT JOIN: keep events even with 0 regs
     WHERE " . implode(' AND ', $where) . "
     GROUP BY e.id
     ORDER BY e.event_date DESC
