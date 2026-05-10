@@ -158,7 +158,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <div class="row g-3 mb-4">
                     <?php foreach ($upcomingEvents as $ev): ?>
                     <div class="col-sm-6">
-                        <div class="buliga-card p-3">
+                        <div class="buliga-card p-3 d-flex flex-column">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <span class="status-badge status-<?= $ev['event_status'] ?>">
                                     <?= ucfirst($ev['event_status']) ?>
@@ -176,19 +176,23 @@ require_once __DIR__ . '/../includes/header.php';
                                 <i class="bi bi-calendar3 me-1"></i>
                                 <?= date('M d, Y', strtotime($ev['event_date'])) ?>
                             </div>
-                            <div class="small text-muted mb-2">
+<div class="small text-muted mb-2">
                                 <i class="bi bi-geo-alt me-1"></i>
                                 <?= htmlspecialchars($ev['location']) ?>
                             </div>
-                            <?php if (!$ev['reg_status']): ?>
-                                <a href="/student/event-detail.php?id=<?= $ev['id'] ?>"
-                                   class="btn btn-green btn-sm w-100">
-                                    <i class="bi bi-plus-circle me-1"></i>Register
-                                </a>
-                            <?php else: ?>
-                                <a href="/student/event-detail.php?id=<?= $ev['id'] ?>"
-                                   class="btn btn-outline-buliga btn-sm w-100">View Details</a>
-                            <?php endif; ?>
+                            <div class="mt-auto d-flex justify-content-center">
+                                    <div class="event-card-btn-wrap">
+                                        <?php if (!$ev['reg_status']): ?>
+                                            <a href="/student/event-detail.php?id=<?= $ev['id'] ?>"
+                                               class="btn btn-green btn-sm btn-block">
+                                                <i class="bi bi-plus-circle me-1"></i>Register
+                                            </a>
+                                        <?php else: ?>
+                                            <a href="/student/event-detail.php?id=<?= $ev['id'] ?>"
+                                               class="btn btn-outline-buliga btn-sm btn-block">View Details</a>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
                         </div>
                     </div>
                     <?php endforeach; ?>

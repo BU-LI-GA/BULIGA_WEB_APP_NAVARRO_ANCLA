@@ -1,7 +1,7 @@
 -- ============================================================
 -- BULIGA – Volunteer Management Platform
 -- Database Schema
--- IT26 Final Project
+-- Navarro & Ancla
 -- ============================================================
 
 CREATE DATABASE IF NOT EXISTS buliga_webapp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

@@ -105,7 +105,7 @@ require_once __DIR__ . '/../includes/header.php';
             $slotsFull = $ev['slots_taken'] >= $ev['slots'];
         ?>
         <div class="col-sm-6 col-lg-4">
-            <div class="buliga-card h-100 d-flex flex-col">
+            <div class="buliga-card h-100 d-flex flex-column">
                 <!-- Event Image or Placeholder -->
                 <?php if ($ev['image_url']): ?>
                     <img src="<?= htmlspecialchars($ev['image_url']) ?>"
@@ -150,22 +150,24 @@ require_once __DIR__ . '/../includes/header.php';
                         </span>
                     </div>
 
-                    <div class="mt-auto">
-                        <?php if ($ev['reg_status']): ?>
-                            <a href="/student/event-detail.php?id=<?= $ev['id'] ?>"
-                               class="btn btn-outline-buliga btn-sm w-100">View Details</a>
-                        <?php elseif ($ev['event_status'] !== 'open' || $slotsFull): ?>
-                            <button class="btn btn-sm w-100" disabled
-                                    style="background:#eee;border-radius:var(--radius-pill);">
-                                <?= $slotsFull ? 'Full' : 'Closed' ?>
-                            </button>
-                        <?php else: ?>
-                            <a href="/student/event-detail.php?id=<?= $ev['id'] ?>"
-                               class="btn btn-green btn-sm w-100">
-                                <i class="bi bi-plus-circle me-1"></i>Register Now
-                            </a>
-                        <?php endif; ?>
-                    </div>
+<div class="mt-auto d-flex justify-content-center">
+                            <div class="event-card-btn-wrap">
+                                <?php if ($ev['reg_status']): ?>
+                                    <a href="/student/event-detail.php?id=<?= $ev['id'] ?>"
+                                       class="btn btn-outline-buliga btn-sm btn-block">View Details</a>
+                                <?php elseif ($ev['event_status'] !== 'open' || $slotsFull): ?>
+                                    <a class="btn btn-sm btn-block disabled"
+                                       style="background:#eee;border-radius:var(--radius-pill);border:1.5px solid #ddd;color:#999;">
+                                        <?= $slotsFull ? 'Full' : 'Closed' ?>
+                                    </a>
+                                <?php else: ?>
+                                    <a href="/student/event-detail.php?id=<?= $ev['id'] ?>"
+                                       class="btn btn-green btn-sm btn-block">
+                                        <i class="bi bi-plus-circle me-1"></i>Register Now
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>

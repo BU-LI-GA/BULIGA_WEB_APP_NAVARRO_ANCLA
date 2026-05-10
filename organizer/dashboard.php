@@ -208,9 +208,6 @@ require_once __DIR__ . '/../includes/header.php';
     <!-- Events Summary Table -->
     <div class="section-header">
         <h5><i class="bi bi-table me-2 text-green"></i>My Events Overview</h5>
-        <a href="/organizer/create-event.php" class="btn btn-green btn-sm">
-            <i class="bi bi-plus me-1"></i>New Event
-        </a>
     </div>
 
     <?php if ($myEvents): ?>

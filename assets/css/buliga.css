@@ -504,6 +504,15 @@ a:hover { color: var(--green-deep); }
     font-size: 1.1rem;
 }
 
+/* ---------- Event Card Action Buttons ---------- */
+.event-card-btn-wrap {
+    width: 180px;
+    flex-shrink: 0;
+}
+.event-card-btn-wrap .btn {
+    text-align: center;
+}
+
 /* ---------- Utilities ---------- */
 .text-green  { color: var(--green-mid) !important; }
 .bg-green-pale { background: var(--green-pale) !important; }

@@ -80,12 +80,19 @@ require_once __DIR__ . '/../includes/header.php';
 ?>
 
 <div class="container" style="max-width:800px;">
-    <nav aria-label="breadcrumb" class="mb-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/student/events.php">Events</a></li>
-            <li class="breadcrumb-item active"><?= htmlspecialchars($event['title']) ?></li>
-        </ol>
-    </nav>
+    <div class="d-flex align-items-center mb-3">
+<a href="/student/my-registrations.php" class="btn btn-outline-buliga btn-sm me-3">
+            <i class="bi bi-arrow-left me-1"></i>Back to Registration
+        </a>
+        <nav aria-label="breadcrumb" class="mb-0">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="/student/my-registrations.php">My Registrations</a></li>
+                <li class="breadcrumb-item active"><?= htmlspecialchars($event['title']) ?></li>
+            </ol>
+        </nav>
+    </div>
+        </nav>
+    </div>
 
     <div class="buliga-card mb-4">
         <?php if ($event['image_url']): ?>

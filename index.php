@@ -464,7 +464,7 @@ $siteStats = $statsStmt->fetch();
                 </div>
             </div>
             <div class="col-md-4 text-md-end">
-                <div class="small" style="opacity:.5;">IT26 Final Project &copy; <?= date('Y') ?></div>
+                <div class="small" style="opacity:.5;">Navarro & Ancla &copy; <?= date('Y') ?></div>
             </div>
         </div>
     </div>

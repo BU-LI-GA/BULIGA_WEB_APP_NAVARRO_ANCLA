@@ -152,14 +152,6 @@ require_once __DIR__ . '/../includes/header.php';
         Total registrations: <strong><?= array_sum(array_column($events, 'total_regs')) ?></strong>
     </div>
 
-    <?php else: ?>
-        <div class="empty-state">
-            <span class="empty-icon">📅</span>
-            <p>
-                <?= $search ? 'No events match your search.' : "You haven't created any events yet." ?>
-            </p>
-            <a href="/organizer/create-event.php" class="btn btn-green">Create First Event</a>
-        </div>
     <?php endif; ?>
 </div>
 

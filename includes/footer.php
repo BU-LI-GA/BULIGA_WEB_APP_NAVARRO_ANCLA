@@ -9,7 +9,7 @@
                 <span class="text-muted ms-2">– Volunteer Management Platform</span>
             </div>
             <div class="col-md-6 text-md-end text-muted small">
-                IT26 Final Project &copy; <?= date('Y') ?>
+                Navarro & Ancla &copy; <?= date('Y') ?>
             </div>
         </div>
     </div>
