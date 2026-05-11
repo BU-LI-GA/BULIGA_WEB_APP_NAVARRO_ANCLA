@@ -71,11 +71,11 @@ require_once __DIR__ . '/../includes/header.php';
             </select>
             <button type="submit" class="btn btn-green btn-sm">Filter</button>
             <?php if ($search || $status !== 'all'): ?>
-                <a href="/organizer/events.php" class="btn btn-outline-buliga btn-sm">Clear</a>
+                <a href="events.php" class="btn btn-outline-buliga btn-sm">Clear</a>
             <?php endif; ?>
         </form>
         <div class="ms-auto">
-            <a href="/organizer/create-event.php" class="btn btn-green">
+            <a href="create-event.php" class="btn btn-green">
                 <i class="bi bi-plus me-1"></i>New Event
             </a>
         </div>
@@ -125,19 +125,19 @@ require_once __DIR__ . '/../includes/header.php';
                     <td><?= $ev['approved'] ?></td>
                     <td>
                         <div class="d-flex gap-1 flex-wrap">
-                            <a href="/organizer/manage-registrations.php?event_id=<?= $ev['id'] ?>"
+                            <a href="manage-registrations.php?event_id=<?= $ev['id'] ?>"
                                class="btn btn-outline-buliga btn-sm">
-                                <i class="bi bi-people"></i>
-                            </a>
-                            <a href="/organizer/edit-event.php?id=<?= $ev['id'] ?>"
+                               <i class="bi bi-people"></i>
+                           </a>
+                           <a href="edit-event.php?id=<?= $ev['id'] ?>"
                                class="btn btn-green btn-sm">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <a href="/organizer/send-announcement.php?event_id=<?= $ev['id'] ?>"
+                               <i class="bi bi-pencil"></i>
+                           </a>
+                           <a href="send-announcement.php?event_id=<?= $ev['id'] ?>"
                                class="btn btn-sm"
                                style="background:var(--amber-light);color:var(--soil);border:1px solid #f0d090;border-radius:var(--radius-pill);">
-                                <i class="bi bi-megaphone"></i>
-                            </a>
+                               <i class="bi bi-megaphone"></i>
+                           </a>
                         </div>
                     </td>
                 </tr>

@@ -16,8 +16,7 @@ RewriteRule . index.php [L]
 
 # Protect sensitive directories
 <FilesMatch "^(config|includes)/">
-    Order Deny,Allow
-    Deny from all
+    Require all denied
 </FilesMatch>
 
 # Security headers

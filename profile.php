@@ -1,10 +1,10 @@
 <?php
 // ============================================================
-// student/profile.php – View & Edit Profile
+// profile.php – View & Edit Profile (works for both roles)
 // Demonstrates: CRUD Update (UPDATE query)
 // ============================================================
-require_once __DIR__ . '/../includes/session.php';
-require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/includes/session.php';
+require_once __DIR__ . '/config/db.php';
 requireLogin();
 
 $db  = getDB();
@@ -29,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         setFlash('error', 'Password must be at least 6 characters.');
     } else {
         if ($password) {
-            // UPDATE with new password – CRUD: Update
             $hash = password_hash($password, PASSWORD_BCRYPT);
             $upd  = $db->prepare(
                 "UPDATE users SET full_name = ?, bio = ?, password = ?, updated_at = NOW()
@@ -37,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
             $upd->execute([$full_name, $bio, $hash, $uid]);
         } else {
-            // UPDATE without password change
             $upd = $db->prepare(
                 "UPDATE users SET full_name = ?, bio = ?, updated_at = NOW() WHERE id = ?"
             );
@@ -45,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $_SESSION['full_name'] = $full_name;
         setFlash('success', 'Profile updated successfully!');
-        header('Location: profile.php');
+        header('Location: /profile.php');
         exit;
     }
 }
@@ -54,22 +52,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $stmt->execute([$uid]);
 $user = $stmt->fetch();
 
-// Hours & events summary
-$sumStmt = $db->prepare("
-    SELECT COUNT(*) AS total, COALESCE(SUM(hours_rendered),0) AS hours
-    FROM registrations WHERE student_id = ? AND status = 'completed'
-");
-$sumStmt->execute([$uid]);
-$summary = $sumStmt->fetch();
+// Get summary stats based on role
+if ($user['role'] === 'student') {
+    $sumStmt = $db->prepare("
+        SELECT COUNT(*) AS total, COALESCE(SUM(hours_rendered),0) AS hours
+        FROM registrations WHERE student_id = ? AND status = 'completed'
+    ");
+    $sumStmt->execute([$uid]);
+    $summary = $sumStmt->fetch();
+} else {
+    // Organizer: count events created
+    $sumStmt = $db->prepare("
+        SELECT COUNT(*) AS total
+        FROM events WHERE organizer_id = ?
+    ");
+    $sumStmt->execute([$uid]);
+    $summary = $sumStmt->fetch();
+    $summary['hours'] = 0;
+}
 
 $pageTitle = 'My Profile';
-require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/includes/header.php';
 ?>
 
 <div class="page-hero">
     <div class="container">
         <h1><i class="bi bi-person-circle me-2"></i>My Profile</h1>
-        <p>Manage your account information and view your volunteering record.</p>
+        <p>Manage your account information.</p>
     </div>
 </div>
 
@@ -93,15 +102,17 @@ require_once __DIR__ . '/../includes/header.php';
                 <div class="col-6">
                     <div class="stat-card">
                         <div class="stat-value"><?= $summary['total'] ?></div>
-                        <div class="stat-label">Events Completed</div>
+                        <div class="stat-label"><?= $user['role'] === 'student' ? 'Events Completed' : 'Events Created' ?></div>
                     </div>
                 </div>
+                <?php if ($user['role'] === 'student'): ?>
                 <div class="col-6">
                     <div class="stat-card">
                         <div class="stat-value"><?= number_format($summary['hours'], 1) ?>h</div>
                         <div class="stat-label">Volunteer Hours</div>
                     </div>
                 </div>
+                <?php endif; ?>
             </div>
             <?php if ($user['bio']): ?>
                 <p class="mt-3 text-muted small"><?= nl2br(htmlspecialchars($user['bio'])) ?></p>
@@ -127,7 +138,7 @@ require_once __DIR__ . '/../includes/header.php';
             <div class="mb-3">
                 <label class="form-label">Bio / About Me</label>
                 <textarea name="bio" class="form-control" rows="3"
-                          placeholder="Tell others about your passion for volunteering…"><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
+                          placeholder="Tell others about yourself…"><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
             </div>
             <hr />
             <h6 class="fw-sora mb-3">Change Password <span class="text-muted fw-normal small">(optional)</span></h6>
@@ -153,4 +164,4 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 </div>
 
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

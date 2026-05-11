@@ -16,7 +16,7 @@ $eid = (int)($_GET['event_id'] ?? 0);
 $evStmt = $db->prepare("SELECT * FROM events WHERE id = ? AND organizer_id = ?");
 $evStmt->execute([$eid, $uid]);
 $event = $evStmt->fetch();
-if (!$event) { setFlash('error', 'Event not found.'); header('Location: /organizer/dashboard.php'); exit; }
+if (!$event) { setFlash('error', 'Event not found.'); header('Location: dashboard.php'); exit; }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['ann_title'] ?? '');
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
         $ins->execute([$eid, $uid, $title, $body]);
         setFlash('success', 'Announcement sent to all registered volunteers!');
-        header("Location: /organizer/send-announcement.php?event_id=$eid");
+        header("Location: send-announcement.php?event_id=$eid");
         exit;
     }
 }

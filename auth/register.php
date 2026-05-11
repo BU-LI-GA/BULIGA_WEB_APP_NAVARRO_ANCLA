@@ -6,7 +6,7 @@ require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../config/db.php';
 
 if (isLoggedIn()) {
-    header('Location: /' . currentRole() . '/dashboard.php');
+     header('Location: ../' . currentRole() . '/dashboard.php');
     exit;
 }
 
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
             $ins->execute([$full_name, $email, $hash, $role]);
             setFlash('success', 'Account created! Please log in.');
-            header('Location: /auth/login.php');
+            header('Location: login.php');
             exit;
         }
     }
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
-    <link href="/assets/css/buliga.css" rel="stylesheet" />
+    <link href="../assets/css/buliga.css" rel="stylesheet" />
 </head>
 <body>
 <div class="auth-wrapper">
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <hr class="my-3" />
         <p class="text-center small text-muted mb-0">
             Already have an account?
-            <a href="/auth/login.php" class="fw-sora text-green">Log in</a>
+             <a href="login.php" class="fw-sora text-green">Log in</a>
         </p>
     </div>
 </div>

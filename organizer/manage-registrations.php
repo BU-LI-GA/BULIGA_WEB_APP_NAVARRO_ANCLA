@@ -15,7 +15,7 @@ $eid = (int)($_GET['event_id'] ?? 0);
 $evStmt = $db->prepare("SELECT * FROM events WHERE id = ? AND organizer_id = ?");
 $evStmt->execute([$eid, $uid]);
 $event = $evStmt->fetch();
-if (!$event) { setFlash('error', 'Event not found.'); header('Location: /organizer/dashboard.php'); exit; }
+if (!$event) { setFlash('error', 'Event not found.'); header('Location: dashboard.php'); exit; }
 
 // Handle status update (approve / reject / complete)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         setFlash('success', 'Registration status updated.');
     }
-    header("Location: /organizer/manage-registrations.php?event_id=$eid");
+    header("Location: manage-registrations.php?event_id=$eid");
     exit;
 }
 
@@ -84,10 +84,10 @@ require_once __DIR__ . '/../includes/header.php';
 
 <div class="container">
     <div class="d-flex flex-wrap gap-2 mb-4 align-items-center">
-        <a href="/organizer/edit-event.php?id=<?= $eid ?>" class="btn btn-outline-buliga btn-sm">
+        <a href="edit-event.php?id=<?= $eid ?>" class="btn btn-outline-buliga btn-sm">
             <i class="bi bi-pencil me-1"></i>Edit Event
         </a>
-        <a href="/organizer/send-announcement.php?event_id=<?= $eid ?>" class="btn btn-green btn-sm">
+        <a href="send-announcement.php?event_id=<?= $eid ?>" class="btn btn-green btn-sm">
             <i class="bi bi-megaphone me-1"></i>Send Announcement
         </a>
         <div class="ms-auto d-flex gap-2 flex-wrap">

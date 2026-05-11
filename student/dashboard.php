@@ -151,7 +151,7 @@ require_once __DIR__ . '/../includes/header.php';
             <!-- Upcoming Events -->
             <div class="section-header">
                 <h5><i class="bi bi-calendar-event me-2 text-green"></i>Open Events Near You</h5>
-                <a href="/student/events.php" class="btn btn-outline-buliga btn-sm">Browse All</a>
+                <a href="events.php" class="btn btn-outline-buliga btn-sm">Browse All</a>
             </div>
 
             <?php if ($upcomingEvents): ?>
@@ -183,12 +183,12 @@ require_once __DIR__ . '/../includes/header.php';
                             <div class="mt-auto d-flex justify-content-center">
                                     <div class="event-card-btn-wrap">
                                         <?php if (!$ev['reg_status']): ?>
-                                            <a href="/student/event-detail.php?id=<?= $ev['id'] ?>"
+                                            <a href="event-detail.php?id=<?= $ev['id'] ?>"
                                                class="btn btn-green btn-sm btn-block">
                                                 <i class="bi bi-plus-circle me-1"></i>Register
                                             </a>
                                         <?php else: ?>
-                                            <a href="/student/event-detail.php?id=<?= $ev['id'] ?>"
+                                            <a href="event-detail.php?id=<?= $ev['id'] ?>"
                                                class="btn btn-outline-buliga btn-sm btn-block">View Details</a>
                                         <?php endif; ?>
                                     </div>
@@ -201,14 +201,14 @@ require_once __DIR__ . '/../includes/header.php';
                 <div class="empty-state buliga-card mb-4">
                     <span class="empty-icon">📅</span>
                     <p>No upcoming events available at the moment.</p>
-                    <a href="/student/events.php" class="btn btn-green btn-sm">Browse All Events</a>
+                    <a href="events.php" class="btn btn-green btn-sm">Browse All Events</a>
                 </div>
             <?php endif; ?>
 
             <!-- Recent Registrations Table -->
             <div class="section-header">
                 <h5><i class="bi bi-bookmark-check me-2 text-green"></i>My Recent Registrations</h5>
-                <a href="/student/my-registrations.php" class="btn btn-outline-buliga btn-sm">View All</a>
+                <a href="my-registrations.php" class="btn btn-outline-buliga btn-sm">View All</a>
             </div>
 
             <?php if ($recentRegs): ?>
@@ -246,7 +246,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <div class="empty-state buliga-card">
                     <span class="empty-icon">🌱</span>
                     <p>You haven't registered for any events yet.</p>
-                    <a href="/student/events.php" class="btn btn-green btn-sm">Find Events</a>
+                    <a href="events.php" class="btn btn-green btn-sm">Find Events</a>
                 </div>
             <?php endif; ?>
         </div>
@@ -283,14 +283,22 @@ require_once __DIR__ . '/../includes/header.php';
             <?php endif; ?>
         </div>
     </div>
-</div>
 
-<script>
-makeDoughnut('statusChart',
-    <?= json_encode($chartLabels) ?>,
-    <?= json_encode($chartData) ?>,
-    ['#f5a623', '#2d9b5a', '#2c5cf7', '#e74c3c']
-);
-</script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function tryInitCharts() {
+            if (typeof makeDoughnut === 'function') {
+                makeDoughnut('statusChart',
+                    <?= json_encode($chartLabels) ?>,
+                    <?= json_encode($chartData) ?>,
+                    ['#f5a623', '#2d9b5a', '#2c5cf7', '#e74c3c']
+                );
+            } else {
+                setTimeout(tryInitCharts, 100);
+            }
+        }
+        setTimeout(tryInitCharts, 50);
+    });
+    </script>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

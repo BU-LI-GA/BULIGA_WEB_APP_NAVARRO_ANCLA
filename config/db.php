@@ -1,11 +1,15 @@
 <?php
+$host = getenv('DB_HOST') ?: 'localhost';
+$name = getenv('DB_NAME') ?: 'buliga_webapp';
+$user = getenv('DB_USER') ?: 'root';
+$pass = getenv('DB_PASS') ?: '';
+$charset = getenv('DB_CHARSET') ?: 'utf8mb4';
 
-
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'buliga_webapp');
-define('DB_USER', 'root');       // change to your MySQL username
-define('DB_PASS', '');           // change to your MySQL password
-define('DB_CHARSET', 'utf8mb4');
+define('DB_HOST', $host);
+define('DB_NAME', $name);
+define('DB_USER', $user);
+define('DB_PASS', $pass);
+define('DB_CHARSET', $charset);
 
 function getDB(): PDO {
     static $pdo = null;

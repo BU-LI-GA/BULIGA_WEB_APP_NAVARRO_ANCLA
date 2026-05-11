@@ -108,10 +108,10 @@ require_once __DIR__ . '/../includes/header.php';
             <?php foreach ($regs as $r): ?>
                 <tr>
                     <td>
-                        <a href="/student/event-detail.php?id=<?= $r['event_id'] ?>"
+                        <a href="event-detail.php?id=<?= $r['event_id'] ?>"
                            class="fw-sora text-dark" style="font-size:.9rem;">
-                            <?= htmlspecialchars($r['event_title']) ?>
-                        </a>
+                             <?= htmlspecialchars($r['event_title']) ?>
+                         </a>
                     </td>
                     <td class="small text-muted"><?= date('M d, Y', strtotime($r['event_date'])) ?></td>
                     <td class="small text-muted"><?= htmlspecialchars($r['location']) ?></td>
@@ -123,7 +123,7 @@ require_once __DIR__ . '/../includes/header.php';
                     </td>
                     <td><?= number_format($r['hours_rendered'], 1) ?>h</td>
                     <td>
-                        <a href="/student/event-detail.php?id=<?= $r['event_id'] ?>"
+                        <a href="event-detail.php?id=<?= $r['event_id'] ?>"
                            class="btn btn-outline-buliga btn-sm">View</a>
                     </td>
                 </tr>
@@ -135,7 +135,7 @@ require_once __DIR__ . '/../includes/header.php';
         <div class="empty-state">
             <span class="empty-icon">🌱</span>
             <p>You haven't registered for any events yet. Start volunteering today!</p>
-            <a href="/student/events.php" class="btn btn-green">Browse Events</a>
+            <a href="events.php" class="btn btn-green">Browse Events</a>
         </div>
     <?php endif; ?>
 </div>

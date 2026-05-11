@@ -11,7 +11,7 @@ $db     = getDB();
 $uid    = currentUserId();
 $eid    = (int)($_GET['id'] ?? 0);
 
-if (!$eid) { header('Location: /student/events.php'); exit; }
+if (!$eid) { header('Location: events.php'); exit; }
 
 // ── INNER JOIN: Event + organizer details ──────────────────
 // Only fetches if event exists (required join).
@@ -29,7 +29,7 @@ $evStmt = $db->prepare("
 $evStmt->execute([$eid]);
 $event = $evStmt->fetch();
 
-if (!$event) { setFlash('error', 'Event not found.'); header('Location: /student/events.php'); exit; }
+if (!$event) { setFlash('error', 'Event not found.'); header('Location: events.php'); exit; }
 
 // Check if student already registered
 $regStmt = $db->prepare("SELECT * FROM registrations WHERE student_id = ? AND event_id = ?");
@@ -52,15 +52,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
             $ins->execute([$uid, $eid]);
             setFlash('success', 'You have successfully registered for this event! 🎉');
+            header('Location: my-registrations.php');
+            exit;
         }
     } elseif ($action === 'unregister' && $myReg && $myReg['status'] === 'pending') {
-        // DELETE – CRUD: Delete
         $del = $db->prepare("DELETE FROM registrations WHERE student_id = ? AND event_id = ?");
         $del->execute([$uid, $eid]);
-        setFlash('success', 'Your registration has been cancelled.');
+setFlash('success', 'Your registration has been cancelled.');
+            header('Location: my-registrations.php');
+            exit;
+        }
     }
 
-    header("Location: /student/event-detail.php?id=$eid");
+    header("Location: event-detail.php?id=$eid");
     exit;
 }
 
@@ -81,12 +85,12 @@ require_once __DIR__ . '/../includes/header.php';
 
 <div class="container" style="max-width:800px;">
     <div class="d-flex align-items-center mb-3">
-        <a href="/student/my-registrations.php" class="btn btn-outline-buliga btn-sm me-3">
+        <a href="my-registrations.php" class="btn btn-outline-buliga btn-sm me-3">
             <i class="bi bi-arrow-left me-1"></i>Back to Registration
         </a>
         <nav aria-label="breadcrumb" class="mb-0">
             <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="/student/my-registrations.php">My Registrations</a></li>
+                <li class="breadcrumb-item"><a href="my-registrations.php">My Registrations</a></li>
                 <li class="breadcrumb-item active"><?= htmlspecialchars($event['title']) ?></li>
             </ol>
         </nav>
@@ -94,7 +98,7 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="buliga-card mb-4">
         <?php if ($event['image_url']): ?>
-            <img src="<?= htmlspecialchars($event['image_url']) ?>"
+            <img src="<?= htmlspecialchars(str_starts_with($event['image_url'], '/uploads/') ? '/buliga' . $event['image_url'] : $event['image_url']) ?>"
                  class="card-img-top" style="height:260px;object-fit:cover;" alt="" />
         <?php else: ?>
             <div class="event-card-placeholder" style="height:200px;font-size:5rem;">🌿</div>

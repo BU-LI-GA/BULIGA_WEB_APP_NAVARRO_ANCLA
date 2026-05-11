@@ -7,7 +7,7 @@ require_once __DIR__ . '/config/db.php';
 
 // If logged in, redirect to dashboard
 if (isLoggedIn()) {
-    header('Location: /' . currentRole() . '/dashboard.php');
+        header('Location: ' . currentRole() . '/dashboard.php');
     exit;
 }
 
@@ -47,7 +47,7 @@ $siteStats = $statsStmt->fetch();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-    <link href="/assets/css/buliga.css" rel="stylesheet" />
+    <link href="./assets/css/buliga.css" rel="stylesheet" />
     <style>
         /* Landing-page only extras */
         .how-step {
@@ -151,7 +151,7 @@ $siteStats = $statsStmt->fetch();
 <!-- ── Navbar ── -->
 <nav class="navbar navbar-expand-lg buliga-navbar">
     <div class="container">
-        <a class="navbar-brand buliga-brand" href="/">
+        <a class="navbar-brand buliga-brand" href="./">
             <span class="brand-icon">🌿</span> Buliga
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
@@ -164,9 +164,9 @@ $siteStats = $statsStmt->fetch();
                 <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
             </ul>
             <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><a class="nav-link" href="/auth/login.php">Log In</a></li>
+                <li class="nav-item"><a class="nav-link" href="auth/login.php">Log In</a></li>
                 <li class="nav-item ms-2">
-                    <a class="btn btn-buliga" href="/auth/register.php">Get Started</a>
+                    <a class="btn btn-buliga" href="auth/register.php">Get Started</a>
                 </li>
             </ul>
         </div>
@@ -190,7 +190,7 @@ $siteStats = $statsStmt->fetch();
                     and tracking your community service journey — all in one place.
                 </p>
                 <div class="hero-cta-wrap mb-5">
-                    <a href="/auth/register.php" class="btn btn-buliga btn-lg px-4 py-2">
+                    <a href="auth/register.php" class="btn btn-buliga btn-lg px-4 py-2">
                         <i class="bi bi-person-plus me-2"></i>Join as Volunteer
                     </a>
                     <a href="#events" class="btn btn-lg px-4 py-2"
@@ -319,7 +319,7 @@ $siteStats = $statsStmt->fetch();
                 <span class="section-eyebrow">Open Now</span>
                 <h2 class="fw-sora mb-0" style="font-size:2rem;">Upcoming Events</h2>
             </div>
-            <a href="/auth/register.php" class="btn btn-green">
+                     <a href="auth/register.php" class="btn btn-green">
                 Register to Join <i class="bi bi-arrow-right ms-1"></i>
             </a>
         </div>
@@ -330,8 +330,8 @@ $siteStats = $statsStmt->fetch();
             <div class="col-md-4">
                 <div class="buliga-card h-100">
                     <?php if ($ev['image_url']): ?>
-                        <img src="<?= htmlspecialchars($ev['image_url']) ?>"
-                             class="card-img-top" alt="Event" />
+                            <img src="<?= htmlspecialchars(str_starts_with($ev['image_url'], '/uploads/') ? '/buliga' . $ev['image_url'] : $ev['image_url']) ?>"
+                                 class="card-img-top" alt="Event" />
                     <?php else: ?>
                         <div class="event-card-placeholder">🌿</div>
                     <?php endif; ?>
@@ -350,7 +350,7 @@ $siteStats = $statsStmt->fetch();
                             <?= htmlspecialchars($ev['location']) ?>
                         </div>
                         <div class="mt-auto">
-                            <a href="/auth/register.php" class="btn btn-green btn-sm w-100">
+                                 <a href="auth/register.php" class="btn btn-green btn-sm w-100">
                                 <i class="bi bi-plus-circle me-1"></i>Register to Join
                             </a>
                         </div>
@@ -384,7 +384,7 @@ $siteStats = $statsStmt->fetch();
                     Whether you're a student looking to make an impact or an organizer coordinating
                     community events, Buliga gives you the tools to connect, collaborate, and serve.
                 </p>
-                <a href="/auth/register.php" class="btn btn-green px-4">
+                     <a href="auth/register.php" class="btn btn-green px-4">
                     <i class="bi bi-heart me-2"></i>Start Volunteering Today
                 </a>
             </div>
@@ -436,10 +436,10 @@ $siteStats = $statsStmt->fetch();
                 building your community impact today.
             </p>
             <div class="d-flex gap-3 justify-content-center flex-wrap">
-                <a href="/auth/register.php" class="btn btn-buliga btn-lg px-4">
+                 <a href="auth/register.php" class="btn btn-buliga btn-lg px-4">
                     <i class="bi bi-person-plus me-2"></i>Create Free Account
                 </a>
-                <a href="/auth/login.php" class="btn btn-lg px-4"
+                 <a href="auth/login.php" class="btn btn-lg px-4"
                    style="background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:var(--radius-pill);">
                     <i class="bi bi-box-arrow-in-right me-2"></i>Log In
                 </a>

@@ -11,13 +11,13 @@ $db  = getDB();
 $uid = currentUserId();
 $eid = (int)($_GET['id'] ?? 0);
 
-if (!$eid) { header('Location: /organizer/dashboard.php'); exit; }
+if (!$eid) { header('Location: dashboard.php'); exit; }
 
 // Fetch event (must belong to this organizer)
 $stmt = $db->prepare("SELECT * FROM events WHERE id = ? AND organizer_id = ?");
 $stmt->execute([$eid, $uid]);
 $event = $stmt->fetch();
-if (!$event) { setFlash('error', 'Event not found.'); header('Location: /organizer/dashboard.php'); exit; }
+if (!$event) { setFlash('error', 'Event not found.'); header('Location: dashboard.php'); exit; }
 
 // Handle DELETE
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delete') {
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delet
     $del = $db->prepare("DELETE FROM events WHERE id = ? AND organizer_id = ?");
     $del->execute([$eid, $uid]);
     setFlash('success', 'Event deleted.');
-    header('Location: /organizer/dashboard.php');
+    header('Location: dashboard.php');
     exit;
 }
 
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'edit'
                 $filename = uniqid('ev_', true) . '.' . $ext;
                 $dest     = __DIR__ . '/../uploads/' . $filename;
                 if (move_uploaded_file($_FILES['image']['tmp_name'], $dest)) {
-                    $image_url = '/uploads/' . $filename;
+                    $image_url = '/buliga/uploads/' . $filename;
                 }
             }
         }
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'edit'
         ]);
 
         setFlash('success', 'Event updated successfully!');
-        header("Location: /organizer/edit-event.php?id=$eid");
+        header('Location: events.php');
         exit;
     }
 }
@@ -150,7 +150,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <label class="form-label">Replace Image <span class="text-muted small">(optional)</span></label>
                 <?php if ($event['image_url']): ?>
                     <div class="mb-2">
-                        <img src="<?= htmlspecialchars($event['image_url']) ?>"
+                        <img src="<?= htmlspecialchars(str_starts_with($event['image_url'], '/uploads/') ? '/buliga' . $event['image_url'] : $event['image_url']) ?>"
                              style="max-height:120px;border-radius:var(--radius-sm);" />
                     </div>
                 <?php endif; ?>
@@ -163,12 +163,12 @@ require_once __DIR__ . '/../includes/header.php';
                 <button type="submit" name="action" value="edit" class="btn btn-green px-4 py-2">
                     <i class="bi bi-check2 me-2"></i>Save Changes
                 </button>
-                <a href="/organizer/manage-registrations.php?event_id=<?= $eid ?>"
+                <a href="manage-registrations.php?event_id=<?= $eid ?>"
                    class="btn btn-outline-buliga">Manage Volunteers</a>
-                <a href="/organizer/send-announcement.php?event_id=<?= $eid ?>"
+                <a href="send-announcement.php?event_id=<?= $eid ?>"
                    class="btn btn-outline-buliga">
-                    <i class="bi bi-megaphone me-1"></i>Announce
-                </a>
+                   <i class="bi bi-megaphone me-1"></i>Announce
+               </a>
             </div>
         </form>
 

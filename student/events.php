@@ -108,7 +108,7 @@ require_once __DIR__ . '/../includes/header.php';
             <div class="buliga-card h-100 d-flex flex-column">
                 <!-- Event Image or Placeholder -->
                 <?php if ($ev['image_url']): ?>
-                    <img src="<?= htmlspecialchars($ev['image_url']) ?>"
+                    <img src="<?= htmlspecialchars(str_starts_with($ev['image_url'], '/uploads/') ? '/buliga' . $ev['image_url'] : $ev['image_url']) ?>"
                          class="card-img-top" alt="Event Image" />
                 <?php else: ?>
                     <div class="event-card-placeholder">🌿</div>
@@ -153,19 +153,25 @@ require_once __DIR__ . '/../includes/header.php';
 <div class="mt-auto d-flex justify-content-center">
                             <div class="event-card-btn-wrap">
                                 <?php if ($ev['reg_status']): ?>
-                                    <a href="/student/event-detail.php?id=<?= $ev['id'] ?>"
-                                       class="btn btn-outline-buliga btn-sm btn-block">View Details</a>
+                                 <a href="event-detail.php?id=<?= $ev['id'] ?>"
+                                    class="btn btn-outline-buliga btn-sm btn-block">View Details</a>
                                 <?php elseif ($ev['event_status'] !== 'open' || $slotsFull): ?>
                                     <a class="btn btn-sm btn-block disabled"
                                        style="background:#eee;border-radius:var(--radius-pill);border:1.5px solid #ddd;color:#999;">
                                         <?= $slotsFull ? 'Full' : 'Closed' ?>
                                     </a>
-                                <?php else: ?>
-                                    <a href="/student/event-detail.php?id=<?= $ev['id'] ?>"
-                                       class="btn btn-green btn-sm btn-block">
-                                        <i class="bi bi-plus-circle me-1"></i>Register Now
-                                    </a>
-                                <?php endif; ?>
+<?php else: ?>
+                                      <form method="POST" action="event-detail.php"
+                                            onsubmit="return confirm('Register for this event?')"
+                                            style="display:inline;width:100%;">
+                                          <input type="hidden" name="id" value="<?= $ev['id'] ?>" />
+                                          <input type="hidden" name="action" value="register" />
+                                          <button type="submit"
+                                                  class="btn btn-green btn-sm btn-block">
+                                              <i class="bi bi-plus-circle me-1"></i>Register Now
+                                          </button>
+                                      </form>
+                                 <?php endif; ?>
                             </div>
                         </div>
                 </div>
@@ -178,7 +184,7 @@ require_once __DIR__ . '/../includes/header.php';
     <div class="empty-state">
         <span class="empty-icon">🔍</span>
         <p>No events match your search. Try different keywords.</p>
-        <a href="/student/events.php" class="btn btn-green btn-sm">Clear Search</a>
+        <a href="events.php" class="btn btn-green btn-sm">Clear Search</a>
     </div>
     <?php endif; ?>
 </div>

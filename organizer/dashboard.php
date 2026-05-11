@@ -39,9 +39,7 @@ $totalVols     = array_sum(array_column($myEvents, 'total_regs'));
 $totalApproved = array_sum(array_column($myEvents, 'approved'));
 $openEvents    = count(array_filter($myEvents, fn($e) => $e['status'] === 'open'));
 
-// ── RIGHT JOIN demo: All registrations → Students ──────────
-// RIGHT JOIN: show all registrations even if a student record
-// were somehow missing (defensive; also demonstrates RIGHT JOIN).
+// ── Recent Volunteers: Students registered for organizer's events ──
 $volStmt = $db->prepare("
     SELECT
         u.full_name,
@@ -50,11 +48,10 @@ $volStmt = $db->prepare("
         r.status       AS reg_status,
         r.hours_rendered,
         r.registered_at
-    FROM events e
-    INNER JOIN registrations r  ON r.event_id  = e.id     -- INNER JOIN: only real events
-    RIGHT JOIN users u          ON r.student_id = u.id     -- RIGHT JOIN: keep all students even if no reg
+    FROM registrations r
+    INNER JOIN users u  ON r.student_id = u.id
+    INNER JOIN events e ON r.event_id   = e.id
     WHERE e.organizer_id = ?
-      AND u.role = 'student'
     ORDER BY r.registered_at DESC
     LIMIT 8
 ");
@@ -241,9 +238,9 @@ require_once __DIR__ . '/../includes/header.php';
                     <td><?= $e['total_regs'] ?> / <?= $e['slots'] ?></td>
                     <td><?= $e['approved'] ?></td>
                     <td>
-                        <a href="/organizer/manage-registrations.php?event_id=<?= $e['id'] ?>"
+                        <a href="manage-registrations.php?event_id=<?= $e['id'] ?>"
                            class="btn btn-outline-buliga btn-sm me-1">Volunteers</a>
-                        <a href="/organizer/edit-event.php?id=<?= $e['id'] ?>"
+                        <a href="edit-event.php?id=<?= $e['id'] ?>"
                            class="btn btn-green btn-sm">Edit</a>
                     </td>
                 </tr>
@@ -255,53 +252,48 @@ require_once __DIR__ . '/../includes/header.php';
         <div class="empty-state">
             <span class="empty-icon">📅</span>
             <p>You haven't created any events yet.</p>
-            <a href="/organizer/create-event.php" class="btn btn-green">Create Your First Event</a>
+            <a href="create-event.php" class="btn btn-green">Create Your First Event</a>
         </div>
     <?php endif; ?>
-</div>
 
-<script>
-function initCharts() {
-    // Check if the required functions are defined
-    if (typeof makeBar === 'function' &&
-        typeof makeDoughnut === 'function' &&
-        typeof makeLine === 'function') {
+    <!-- Chart Initialization (runs after page load) -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function tryInitCharts() {
+            if (typeof makeBar === 'function' &&
+                typeof makeDoughnut === 'function' &&
+                typeof makeLine === 'function') {
 
-        // Bar Chart: Registrations per Event
-        <?php if (!empty($myEvents)): ?>
-        makeBar('barChart',
-            <?= json_encode(array_values($barLabels)) ?>,
-            <?= json_encode(array_values($barData)) ?>,
-            'Volunteers Registered'
-        );
-        <?php endif; ?>
+                <?php if (!empty($myEvents)): ?>
+                makeBar('barChart',
+                    <?= json_encode(array_values($barLabels)) ?>,
+                    <?= json_encode(array_values($barData)) ?>,
+                    'Volunteers Registered'
+                );
+                <?php endif; ?>
 
-        // Doughnut: Event Status
-        <?php if ($statusOpen + $statusClosed + $statusCancelled > 0): ?>
-        makeDoughnut('statusChart',
-            ['Open', 'Closed', 'Cancelled'],
-            [<?= $statusOpen ?>, <?= $statusClosed ?>, <?= $statusCancelled ?>],
-            ['#2d9b5a', '#f5a623', '#e74c3c']
-        );
-        <?php endif; ?>
+                <?php if ($statusOpen + $statusClosed + $statusCancelled > 0): ?>
+                makeDoughnut('statusChart',
+                    ['Open', 'Closed', 'Cancelled'],
+                    [<?= $statusOpen ?>, <?= $statusClosed ?>, <?= $statusCancelled ?>],
+                    ['#2d9b5a', '#f5a623', '#e74c3c']
+                );
+                <?php endif; ?>
 
-        // Line Chart: Monthly Registrations
-        <?php if (count($monthly) > 0): ?>
-        makeLine('lineChart',
-            <?= json_encode(array_values($lineLabels)) ?>,
-            <?= json_encode(array_values($lineData)) ?>,
-            'Registrations'
-        );
-        <?php endif; ?>
+                <?php if (count($monthly) > 0): ?>
+                makeLine('lineChart',
+                    <?= json_encode(array_values($lineLabels)) ?>,
+                    <?= json_encode(array_values($lineData)) ?>,
+                    'Registrations'
+                );
+                <?php endif; ?>
 
-    } else {
-        // Not ready yet, try again in 100ms
-        setTimeout(initCharts, 100);
-    }
-}
-
-// Start the initialization
-initCharts();
-</script>
+            } else {
+                setTimeout(tryInitCharts, 100);
+            }
+        }
+        setTimeout(tryInitCharts, 50);
+    });
+    </script>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $filename  = uniqid('ev_', true) . '.' . $ext;
                 $dest      = __DIR__ . '/../uploads/' . $filename;
                 if (move_uploaded_file($_FILES['image']['tmp_name'], $dest)) {
-                    $image_url = '/uploads/' . $filename;
+                    $image_url = '/buliga/uploads/' . $filename;
                 }
             } else {
                 setFlash('error', 'Image must be JPG/PNG/GIF/WEBP under 3MB.');
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $newId = $db->lastInsertId();
         setFlash('success', 'Event "' . $title . '" created successfully! 🎉');
-        header("Location: /organizer/manage-registrations.php?event_id=$newId");
+        header('Location: events.php');
         exit;
     }
 }
@@ -144,7 +144,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <button type="submit" class="btn btn-green px-4 py-2">
                     <i class="bi bi-check2 me-2"></i>Publish Event
                 </button>
-                <a href="/organizer/dashboard.php" class="btn btn-outline-buliga">Cancel</a>
+                <a href="dashboard.php" class="btn btn-outline-buliga">Cancel</a>
             </div>
         </form>
     </div>

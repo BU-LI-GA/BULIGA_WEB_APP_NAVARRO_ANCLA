@@ -3,7 +3,7 @@
 // Expects $pageTitle to be set before including this file.
 if (!isset($pageTitle)) $pageTitle = 'Buliga';
 $role = currentRole();
-$dashLink = $role === 'organizer' ? '/organizer/dashboard.php' : '/student/dashboard.php';
+$dashLink = $role === 'organizer' ? '/buliga/organizer/dashboard.php' : '/buliga/student/dashboard.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,14 +19,14 @@ $dashLink = $role === 'organizer' ? '/organizer/dashboard.php' : '/student/dashb
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
     <!-- Buliga CSS -->
-    <link href="/assets/css/buliga.css" rel="stylesheet" />
+    <link href="/buliga/assets/css/buliga.css" rel="stylesheet" />
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg buliga-navbar">
     <div class="container">
         <!-- Brand -->
-        <a class="navbar-brand buliga-brand" href="<?= isLoggedIn() ? $dashLink : '/' ?>">
+        <a class="navbar-brand buliga-brand" href="<?= isLoggedIn() ? $dashLink : '/buliga/' ?>">
             <span class="brand-icon">🌿</span> Buliga
         </a>
 
@@ -37,16 +37,16 @@ $dashLink = $role === 'organizer' ? '/organizer/dashboard.php' : '/student/dashb
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav me-auto">
                 <?php if ($role === 'student'): ?>
-                    <li class="nav-item"><a class="nav-link" href="/student/dashboard.php"><i class="bi bi-grid-1x2"></i> Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/student/events.php"><i class="bi bi-calendar-event"></i> Events</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/student/my-registrations.php"><i class="bi bi-bookmark-check"></i> My Registrations</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/buliga/student/dashboard.php"><i class="bi bi-grid-1x2"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/buliga/student/events.php"><i class="bi bi-calendar-event"></i> Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/buliga/student/my-registrations.php"><i class="bi bi-bookmark-check"></i> My Registrations</a></li>
                 <?php elseif ($role === 'organizer'): ?>
-                    <li class="nav-item"><a class="nav-link" href="/organizer/dashboard.php"><i class="bi bi-grid-1x2"></i> Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/organizer/events.php"><i class="bi bi-calendar-event"></i> My Events</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/organizer/create-event.php"><i class="bi bi-plus-circle"></i> Create Event</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/organizer/join-demo.php"><i class="bi bi-database"></i> JOIN Demo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/buliga/organizer/dashboard.php"><i class="bi bi-grid-1x2"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/buliga/organizer/events.php"><i class="bi bi-calendar-event"></i> My Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/buliga/organizer/create-event.php"><i class="bi bi-plus-circle"></i> Create Event</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/buliga/organizer/join-demo.php"><i class="bi bi-database"></i> JOIN Demo</a></li>
                 <?php else: ?>
-                    <li class="nav-item"><a class="nav-link" href="/public/events.php"><i class="bi bi-calendar-event"></i> Browse Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/buliga/student/events.php"><i class="bi bi-calendar-event"></i> Browse Events</a></li>
                 <?php endif; ?>
             </ul>
 
@@ -61,14 +61,14 @@ $dashLink = $role === 'organizer' ? '/organizer/dashboard.php' : '/student/dashb
                             <?= htmlspecialchars($_SESSION['full_name'] ?? 'User') ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end buliga-dropdown">
-                            <li><a class="dropdown-item" href="/student/profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="/buliga/profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="/auth/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                            <li><a class="dropdown-item text-danger" href="/buliga/auth/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                         </ul>
                     </li>
                 <?php else: ?>
-                    <li class="nav-item"><a class="nav-link" href="/auth/login.php">Log In</a></li>
-                    <li class="nav-item"><a class="btn btn-buliga ms-2" href="/auth/register.php">Sign Up</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/buliga/auth/login.php">Log In</a></li>
+                    <li class="nav-item"><a class="btn btn-buliga ms-2" href="/buliga/auth/register.php">Sign Up</a></li>
                 <?php endif; ?>
             </ul>
         </div>
