@@ -28,7 +28,7 @@ $dashLink = $role === 'organizer' ? '/buliga/organizer/dashboard.php' : '/buliga
     <div class="container">
         <!-- Brand -->
         <a class="navbar-brand buliga-brand" href="<?= isLoggedIn() ? $dashLink : '/buliga/' ?>">
-            <span class="brand-icon"><img src="/buliga/assets/icons/favicon.svg" alt="Buliga" width="24" height="24" style="vertical-align:middle;" /></span> Buliga
+            <span class="brand-icon">🌿</span> Buliga
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
