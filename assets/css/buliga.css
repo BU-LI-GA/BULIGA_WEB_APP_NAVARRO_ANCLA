@@ -518,26 +518,15 @@ a:hover { color: var(--green-deep); }
 
 /* ---------- Page Transitions ---------- */
 .page {
-    opacity: 0;
-    transform: scale(0.96);
-    transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1),
-                transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
-    animation-fill-mode: forwards;
-}
-
-.page.active {
     opacity: 1;
     transform: scale(1);
+    transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1),
+                transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .page.exit {
     opacity: 0;
     transform: scale(1.03);
-}
-
-.page-link {
-    cursor: pointer;
-    text-decoration: underline;
 }
 
 /* ---------- Responsive ---------- */

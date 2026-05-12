@@ -58,13 +58,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Sign Up · Buliga</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
-    <link href="../assets/css/buliga.css" rel="stylesheet" />
+    <style>
+        body{margin:0;background:#1a6b3c;font-family:'DM Sans',sans-serif}
+        .auth-wrapper{min-height:100vh;background:linear-gradient(135deg,#1a6b3c 0%,#1e7d42 50%,#2d9b5a 100%);display:flex;align-items:center;justify-content:center;padding:2rem 1rem}
+        .auth-card{background:#fff;border-radius:20px;padding:2.5rem;width:100%;max-width:500px;box-shadow:0 24px 60px rgba(0,0,0,.25)}
+        .auth-logo{font-family:'Sora',sans-serif;font-weight:800;font-size:2rem;color:#1a6b3c;text-align:center;margin-bottom:.25rem}
+        .auth-tagline{text-align:center;color:#6b7b6b;font-size:.88rem;margin-bottom:2rem}
+        .btn-green{background:#2d9b5a;color:#fff;border:none;border-radius:999px;padding:.5rem 1.4rem;font-family:'Sora',sans-serif;font-weight:600}
+        .btn-green:hover{background:#1a6b3c;color:#fff}
+        .text-green{color:#2d9b5a!important}
+        .fw-sora{font-family:'Sora',sans-serif}
+    </style>
 </head>
 <body>
-<div class="page" id="page">
 <div class="auth-wrapper">
-    <div class="auth-card" style="max-width:500px;">
+    <div class="auth-card">
         <div class="auth-logo">🌿 Buliga</div>
         <p class="auth-tagline">Create your volunteer account</p>
 
@@ -117,15 +125,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </button>
         </form>
 
-        <hr class="my-3" />
+<hr class="my-3" />
         <p class="text-center small text-muted mb-0">
             Already have an account?
-             <a href="login.php" class="fw-sora text-green">Log in</a>
+            <a href="login.php" class="fw-sora text-green">Log in</a>
         </p>
     </div>
 </div>
-</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/buliga/assets/js/transition.js"></script>
 </body>
 </html>

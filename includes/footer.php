@@ -21,8 +21,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <!-- Buliga JS -->
 <script src="/buliga/assets/js/buliga.js"></script>
-<!-- Transition JS -->
-<script src="/buliga/assets/js/transition.js"></script>
 </div><!-- /div.page -->
 </body>
 </html>
