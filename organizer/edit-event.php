@@ -11,13 +11,13 @@ $db  = getDB();
 $uid = currentUserId();
 $eid = (int)($_GET['id'] ?? 0);
 
-if (!$eid) { header('Location: dashboard.php'); exit; }
+if (!$eid) { header('Location: /buliga/organizer/dashboard.php'); exit; }
 
 // Fetch event (must belong to this organizer)
 $stmt = $db->prepare("SELECT * FROM events WHERE id = ? AND organizer_id = ?");
 $stmt->execute([$eid, $uid]);
 $event = $stmt->fetch();
-if (!$event) { setFlash('error', 'Event not found.'); header('Location: dashboard.php'); exit; }
+if (!$event) { setFlash('error', 'Event not found.'); header('Location: /buliga/organizer/dashboard.php'); exit; }
 
 // Handle DELETE
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delete') {
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delet
     $del = $db->prepare("DELETE FROM events WHERE id = ? AND organizer_id = ?");
     $del->execute([$eid, $uid]);
     setFlash('success', 'Event deleted.');
-    header('Location: dashboard.php');
+header('Location: /buliga/organizer/events.php');
     exit;
 }
 
@@ -46,9 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'edit'
         $image_url = $event['image_url'];
 
         // New image uploaded?
-        if (!empty($_FILES['image']['name'])) {
+        if (!empty($_FILES['image']['name']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $finfo   = new finfo(FILEINFO_MIME_TYPE);
+            $mime    = $finfo->file($_FILES['image']['tmp_name']);
             $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-            $mime    = $_FILES['image']['type'];
             if (in_array($mime, $allowed) && $_FILES['image']['size'] < 3_000_000) {
                 $ext      = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
                 $filename = uniqid('ev_', true) . '.' . $ext;
@@ -56,6 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'edit'
                 if (move_uploaded_file($_FILES['image']['tmp_name'], $dest)) {
                     $image_url = '/buliga/uploads/' . $filename;
                 }
+            } else {
+                setFlash('error', 'Image must be JPG/PNG/GIF/WEBP under 3MB.');
+                header('Location: /buliga/organizer/edit-event.php?id=' . $eid);
+                exit;
             }
         }
 

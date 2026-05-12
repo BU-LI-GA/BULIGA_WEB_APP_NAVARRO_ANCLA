@@ -7,7 +7,7 @@ require_once __DIR__ . '/config/db.php';
 
 // If logged in, redirect to dashboard
 if (isLoggedIn()) {
-        header('Location: ' . currentRole() . '/dashboard.php');
+        header('Location: /buliga/' . currentRole() . '/dashboard.php');
     exit;
 }
 

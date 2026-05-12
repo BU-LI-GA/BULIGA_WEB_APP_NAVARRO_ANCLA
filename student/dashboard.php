@@ -182,11 +182,11 @@ require_once __DIR__ . '/../includes/header.php';
                             </div>
                             <div class="mt-auto d-flex justify-content-center">
                                     <div class="event-card-btn-wrap">
-                                        <?php if (!$ev['reg_status']): ?>
-                                            <a href="event-detail.php?id=<?= $ev['id'] ?>"
-                                               class="btn btn-green btn-sm btn-block">
-                                                <i class="bi bi-plus-circle me-1"></i>Register
-                                            </a>
+<?php if (!$ev['reg_status']): ?>
+                                                <a href="events.php"
+                                                   class="btn btn-green btn-sm btn-block">
+                                                     <i class="bi bi-plus-circle me-1"></i>Register
+                                                 </a>
                                         <?php else: ?>
                                             <a href="event-detail.php?id=<?= $ev['id'] ?>"
                                                class="btn btn-outline-buliga btn-sm btn-block">View Details</a>

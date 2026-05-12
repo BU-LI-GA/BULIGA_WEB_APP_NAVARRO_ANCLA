@@ -12,7 +12,7 @@ if (session_status() === PHP_SESSION_NONE) {
  */
 function requireLogin(): void {
     if (empty($_SESSION['user_id'])) {
-        header('Location: ../auth/login.php');
+        header('Location: /buliga/auth/login.php');
         exit;
     }
 }

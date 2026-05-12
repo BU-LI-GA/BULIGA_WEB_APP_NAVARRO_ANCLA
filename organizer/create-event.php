@@ -27,9 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Handle image upload
         $image_url = null;
-        if (!empty($_FILES['image']['name'])) {
+        if (!empty($_FILES['image']['name']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $finfo   = new finfo(FILEINFO_MIME_TYPE);
+            $mime    = $finfo->file($_FILES['image']['tmp_name']);
             $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-            $mime    = $_FILES['image']['type'];
             if (in_array($mime, $allowed) && $_FILES['image']['size'] < 3_000_000) {
                 $ext       = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
                 $filename  = uniqid('ev_', true) . '.' . $ext;
@@ -39,6 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             } else {
                 setFlash('error', 'Image must be JPG/PNG/GIF/WEBP under 3MB.');
+                header('Location: create-event.php');
+                exit;
             }
         }
 

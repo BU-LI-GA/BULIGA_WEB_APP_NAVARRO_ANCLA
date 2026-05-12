@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $_SESSION['full_name'] = $full_name;
         setFlash('success', 'Profile updated successfully!');
-        header('Location: profile.php');
+        header('Location: /buliga/student/profile.php');
         exit;
     }
 }

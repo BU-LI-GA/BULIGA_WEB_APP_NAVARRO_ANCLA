@@ -1,11 +1,11 @@
 <?php
 // ============================================================
-// profile.php – View & Edit Profile (works for both roles)
-// Demonstrates: CRUD Update (UPDATE query)
+// organizer/profile.php – Organizer Profile View & Edit
+// Demonstrates: CRUD Update (UPDATE query), aggregated stats
 // ============================================================
-require_once __DIR__ . '/includes/session.php';
-require_once __DIR__ . '/config/db.php';
-requireLogin();
+require_once __DIR__ . '/../includes/session.php';
+require_once __DIR__ . '/../config/db.php';
+requireRole('organizer');
 
 $db  = getDB();
 $uid = currentUserId();
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $_SESSION['full_name'] = $full_name;
         setFlash('success', 'Profile updated successfully!');
-        header('Location: /buliga/' . ($user['role'] === 'organizer' ? 'organizer/' : 'student/') . 'profile.php');
+        header('Location: /buliga/organizer/profile.php?saved=1');
         exit;
     }
 }
@@ -52,44 +52,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $stmt->execute([$uid]);
 $user = $stmt->fetch();
 
-// Get summary stats based on role
-if ($user['role'] === 'student') {
-    $sumStmt = $db->prepare("
-        SELECT COUNT(*) AS total, COALESCE(SUM(hours_rendered),0) AS hours
-        FROM registrations WHERE student_id = ? AND status = 'completed'
-    ");
-    $sumStmt->execute([$uid]);
-    $summary = $sumStmt->fetch();
-} else {
-    // Organizer: count events created
-    $sumStmt = $db->prepare("
-        SELECT COUNT(*) AS total
-        FROM events WHERE organizer_id = ?
-    ");
-    $sumStmt->execute([$uid]);
-    $summary = $sumStmt->fetch();
-    $summary['hours'] = 0;
-}
+// ── Organizer stats ──────────────────────────────────────────
+$stats = $db->prepare("
+    SELECT
+        COUNT(*)                                                AS total_events,
+        COALESCE(SUM(CASE WHEN status='open'      THEN 1 END), 0) AS open_events,
+        COALESCE(SUM(CASE WHEN status='closed'    THEN 1 END), 0) AS closed_events,
+        COALESCE(SUM(CASE WHEN status='cancelled' THEN 1 END), 0) AS cancelled_events
+    FROM events WHERE organizer_id = ?
+");
+$stats->execute([$uid]);
+$eventStats = $stats->fetch();
 
-$pageTitle = 'My Profile';
-require_once __DIR__ . '/includes/header.php';
+// Total registrations across all organizer events
+$regsStmt = $db->prepare("
+    SELECT
+        COUNT(r.id)                                                    AS total_regs,
+        COALESCE(SUM(CASE WHEN r.status='approved'  THEN 1 END), 0)   AS approved,
+        COALESCE(SUM(CASE WHEN r.status='pending'   THEN 1 END), 0)   AS pending,
+        COALESCE(SUM(CASE WHEN r.status='completed' THEN 1 END), 0)   AS completed,
+        COALESCE(SUM(r.hours_rendered), 0)                             AS total_hours
+    FROM registrations r
+    INNER JOIN events e ON r.event_id = e.id
+    WHERE e.organizer_id = ?
+");
+$regsStmt->execute([$uid]);
+$regStats = $regsStmt->fetch();
+
+// ── Latest 5 events ─────────────────────────────────────────
+$eventsStmt = $db->prepare("
+    SELECT
+        e.id, e.title, e.event_date, e.status,
+        e.slots,
+        COUNT(r.id)                                  AS total_regs,
+        SUM(CASE WHEN r.status='approved' THEN 1 ELSE 0 END) AS approved
+    FROM events e
+    LEFT JOIN registrations r ON r.event_id = e.id
+    WHERE e.organizer_id = ?
+    GROUP BY e.id
+    ORDER BY e.event_date DESC
+    LIMIT 5
+");
+$eventsStmt->execute([$uid]);
+$recentEvents = $eventsStmt->fetchAll();
+
+$pageTitle = 'Organizer Profile';
+require_once __DIR__ . '/../includes/header.php';
 ?>
 
 <div class="page-hero">
     <div class="container">
-        <h1><i class="bi bi-person-circle me-2"></i>My Profile</h1>
-        <p>Manage your account information.</p>
+        <h1><i class="bi bi-person-gear me-2"></i>Organizer Profile</h1>
+        <p>Manage your account, view your event statistics, and recent activity.</p>
     </div>
 </div>
 
-<div class="container" style="max-width:700px;">
+<div class="container">
 
+    <!-- ─── Profile Header ─── -->
     <div class="row g-4 mb-4">
         <div class="col-sm-4 text-center">
             <div style="width:110px;height:110px;border-radius:50%;background:var(--green-pale);
                         border:3px solid var(--green-mid);display:flex;align-items:center;
                         justify-content:center;font-size:3rem;margin:0 auto 1rem;">
-                🧑
+                🗓️
             </div>
             <div class="fw-sora fs-5"><?= htmlspecialchars($user['full_name']) ?></div>
             <div class="small text-muted"><?= htmlspecialchars($user['email']) ?></div>
@@ -99,20 +125,34 @@ require_once __DIR__ . '/includes/header.php';
         </div>
         <div class="col-sm-8">
             <div class="row g-3">
-                <div class="col-6">
+                <div class="col-6 col-md-3">
                     <div class="stat-card">
-                        <div class="stat-value"><?= $summary['total'] ?></div>
-                        <div class="stat-label"><?= $user['role'] === 'student' ? 'Events Completed' : 'Events Created' ?></div>
+                        <div class="stat-value"><?= $eventStats['total_events'] ?></div>
+                        <div class="stat-label">Events Created</div>
+                        <i class="bi bi-calendar-event stat-icon"></i>
                     </div>
                 </div>
-                <?php if ($user['role'] === 'student'): ?>
-                <div class="col-6">
+                <div class="col-6 col-md-3">
                     <div class="stat-card">
-                        <div class="stat-value"><?= number_format($summary['hours'], 1) ?>h</div>
-                        <div class="stat-label">Volunteer Hours</div>
+                        <div class="stat-value"><?= $eventStats['open_events'] ?></div>
+                        <div class="stat-label">Open Events</div>
+                        <i class="bi bi-calendar-check stat-icon"></i>
                     </div>
                 </div>
-                <?php endif; ?>
+                <div class="col-6 col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value"><?= $regStats['total_regs'] ?></div>
+                        <div class="stat-label">Total Registrations</div>
+                        <i class="bi bi-people stat-icon"></i>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value"><?= number_format($regStats['total_hours'], 1) ?>h</div>
+                        <div class="stat-label">Hours Rendered</div>
+                        <i class="bi bi-clock stat-icon"></i>
+                    </div>
+                </div>
             </div>
             <?php if ($user['bio']): ?>
                 <p class="mt-3 text-muted small"><?= nl2br(htmlspecialchars($user['bio'])) ?></p>
@@ -120,7 +160,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
     </div>
 
-    <!-- Edit Form -->
+    <!-- ─── Edit Profile Form ─── -->
     <div class="buliga-form-card">
         <h5 class="fw-sora mb-4"><i class="bi bi-pencil-square me-2 text-green"></i>Edit Profile</h5>
         <form method="POST">
@@ -138,7 +178,7 @@ require_once __DIR__ . '/includes/header.php';
             <div class="mb-3">
                 <label class="form-label">Bio / About Me</label>
                 <textarea name="bio" class="form-control" rows="3"
-                          placeholder="Tell others about yourself…"><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
+                          placeholder="Tell others about yourself and your events…"><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
             </div>
             <hr />
             <h6 class="fw-sora mb-3">Change Password <span class="text-muted fw-normal small">(optional)</span></h6>
@@ -164,4 +204,4 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 </div>
 
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>

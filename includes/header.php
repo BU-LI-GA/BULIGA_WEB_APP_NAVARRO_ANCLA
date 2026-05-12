@@ -61,7 +61,7 @@ $dashLink = $role === 'organizer' ? '/buliga/organizer/dashboard.php' : '/buliga
                             <?= htmlspecialchars($_SESSION['full_name'] ?? 'User') ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end buliga-dropdown">
-                            <li><a class="dropdown-item" href="/buliga/profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="/buliga/<?= $role ?>/profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="/buliga/auth/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                         </ul>
@@ -86,3 +86,4 @@ $dashLink = $role === 'organizer' ? '/buliga/organizer/dashboard.php' : '/buliga
 <?php endif; ?>
 
 <main class="py-4">
+<div class="page" id="page">

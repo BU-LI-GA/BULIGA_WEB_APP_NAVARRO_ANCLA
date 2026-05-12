@@ -7,7 +7,7 @@ require_once __DIR__ . '/../config/db.php';
 
 // Already logged in? Redirect.
 if (isLoggedIn()) {
-     header('Location: ../' . currentRole() . '/dashboard.php');
+     header('Location: /buliga/' . currentRole() . '/dashboard.php');
     exit;
 }
 
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['role']      = $user['role'];
 
             setFlash('success', 'Welcome back, ' . $user['full_name'] . '! 🌿');
-            header('Location: ../' . $user['role'] . '/dashboard.php');
+            header('Location: /buliga/' . $user['role'] . '/dashboard.php');
             exit;
         } else {
             $error = 'Invalid email or password. Please try again.';
@@ -55,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="../assets/css/buliga.css" rel="stylesheet" />
 </head>
 <body>
+<div class="page" id="page">
 <div class="auth-wrapper">
     <div class="auth-card">
         <div class="auth-logo">🌿 Buliga</div>
@@ -91,6 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </p>
     </div>
 </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/buliga/assets/js/transition.js"></script>
 </body>
 </html>

@@ -15,7 +15,7 @@ $eid = (int)($_GET['event_id'] ?? 0);
 $evStmt = $db->prepare("SELECT * FROM events WHERE id = ? AND organizer_id = ?");
 $evStmt->execute([$eid, $uid]);
 $event = $evStmt->fetch();
-if (!$event) { setFlash('error', 'Event not found.'); header('Location: dashboard.php'); exit; }
+if (!$event) { setFlash('error', 'Event not found.'); header('Location: /buliga/organizer/dashboard.php'); exit; }
 
 // Handle status update (approve / reject / complete)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

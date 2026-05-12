@@ -11,7 +11,7 @@ $db     = getDB();
 $uid    = currentUserId();
 $eid    = (int)($_GET['id'] ?? 0);
 
-if (!$eid) { header('Location: events.php'); exit; }
+if (!$eid) { header('Location: /buliga/student/events.php'); exit; }
 
 // ── INNER JOIN: Event + organizer details ──────────────────
 // Only fetches if event exists (required join).
@@ -29,7 +29,7 @@ $evStmt = $db->prepare("
 $evStmt->execute([$eid]);
 $event = $evStmt->fetch();
 
-if (!$event) { setFlash('error', 'Event not found.'); header('Location: events.php'); exit; }
+if (!$event) { setFlash('error', 'Event not found.'); header('Location: /buliga/student/events.php'); exit; }
 
 // Check if student already registered
 $regStmt = $db->prepare("SELECT * FROM registrations WHERE student_id = ? AND event_id = ?");
@@ -52,19 +52,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
             $ins->execute([$uid, $eid]);
             setFlash('success', 'You have successfully registered for this event! 🎉');
-            header('Location: my-registrations.php');
+            header('Location: /buliga/student/my-registrations.php');
             exit;
         }
     } elseif ($action === 'unregister' && $myReg && $myReg['status'] === 'pending') {
         $del = $db->prepare("DELETE FROM registrations WHERE student_id = ? AND event_id = ?");
         $del->execute([$uid, $eid]);
-setFlash('success', 'Your registration has been cancelled.');
-            header('Location: my-registrations.php');
+        setFlash('success', 'Your registration has been cancelled.');
+            header('Location: /buliga/student/my-registrations.php');
             exit;
         }
-    }
-
-    header("Location: event-detail.php?id=$eid");
+    header("Location: /buliga/student/event-detail.php?id=$eid");
     exit;
 }
 

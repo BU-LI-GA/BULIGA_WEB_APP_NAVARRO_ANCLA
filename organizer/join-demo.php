@@ -72,8 +72,8 @@ require_once __DIR__ . '/../includes/header.php';
             </div>
             <div class="col-sm-6 col-lg-4">
                 <div class="p-3 rounded-3 bg-green-pale">
-                    <div class="fw-sora text-green mb-1">RIGHT JOIN</div>
-                    <div class="small text-muted">All rows from right table, with matches from left (NULL if no match).</div>
+                    <div class="fw-sora text-green mb-1">LEFT JOIN</div>
+                    <div class="small text-muted">All rows from left table, with matches from right (NULL if no match).</div>
                 </div>
             </div>
         </div>

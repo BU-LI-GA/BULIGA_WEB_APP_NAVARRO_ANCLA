@@ -10,6 +10,38 @@ requireRole('student');
 $db  = getDB();
 $uid = currentUserId();
 
+// ── Handle registration POST directly on this page ────────────
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $eid    = (int)($_POST['id'] ?? 0);
+    $action = $_POST['action'] ?? '';
+
+    if ($action === 'register' && $eid) {
+        // Check if already registered
+        $regCheck = $db->prepare("SELECT id FROM registrations WHERE student_id = ? AND event_id = ?");
+        $regCheck->execute([$uid, $eid]);
+        if (!$regCheck->fetch()) {
+            // Verify event is open and has slots
+            $evCheck = $db->prepare("
+                SELECT e.status,
+                       (SELECT COUNT(*) FROM registrations sr WHERE sr.event_id = e.id AND sr.status != 'rejected') AS slots_taken,
+                       e.slots
+                FROM events e WHERE e.id = ?
+            ");
+            $evCheck->execute([$eid]);
+            $ev = $evCheck->fetch();
+            if ($ev && $ev['status'] === 'open' && $ev['slots_taken'] < $ev['slots']) {
+                $ins = $db->prepare("INSERT INTO registrations (student_id, event_id) VALUES (?, ?)");
+                $ins->execute([$uid, $eid]);
+                setFlash('success', 'You have successfully registered for this event! 🎉');
+            } else {
+                setFlash('error', 'Sorry, this event is no longer available for registration.');
+            }
+        }
+        header('Location: /buliga/student/my-registrations.php');
+        exit;
+    }
+}
+
 $search = trim($_GET['search'] ?? '');
 $filter = $_GET['status'] ?? 'all';
 
@@ -161,7 +193,7 @@ require_once __DIR__ . '/../includes/header.php';
                                         <?= $slotsFull ? 'Full' : 'Closed' ?>
                                     </a>
 <?php else: ?>
-                                      <form method="POST" action="event-detail.php"
+                                      <form method="POST" action="events.php"
                                             onsubmit="return confirm('Register for this event?')"
                                             style="display:inline;width:100%;">
                                           <input type="hidden" name="id" value="<?= $ev['id'] ?>" />
